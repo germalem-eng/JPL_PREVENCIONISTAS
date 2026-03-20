@@ -1,0 +1,18 @@
+
+FECHA: 2026-03-12 17:24
+JORNADA: 14 entre semana fines de semana 38 horas
+PAGO: $73300
+NOTAS: sin condiciones de ley
+-----------------------------------
+FECHA: 2026-03-12 18:12
+HORAS: 38.0
+PAGO RECIBIDO: $73300.0
+DEUDA ESTIMADA: $376700.0
+NOTAS: sin nada de ley
+----------------------------------------
+FECHA: 2026-03-12 18:16
+HORAS: 38.0
+PAGO RECIBIDO: $130000.0
+DEUDA ESTIMADA: $320000.0
+NOTAS: Turno fin de semana. Radicado comunicado formal de inconformidad al Ing. Garzón. Sin curso de seguridad, funciones de vigilancia en obra."
+----------------------------------------

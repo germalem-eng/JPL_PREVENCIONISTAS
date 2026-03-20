@@ -1,0 +1,23 @@
+
+[94m██████████████████████████████████████████████████████[0m
+[1m      L.I.N.A. V5.2 - REPORTE DE FALLA CRÍTICA[0m
+[94m██████████████████████████████████████████████████████[0m
+ESTIMADO(A) GERARDO MARTÍNEZ,
+
+Se ha emitido este reporte técnico debido a una falla catastrófica
+que compromete la integridad del equipo.
+
+DETALLES TÉCNICOS:
+------------------------------------------------------
+- EQUIPO: Whirlpool Xpert W11036799
+- ORIGEN DEL FALLO: Bomba de agua oxidada[[A[B
+- IMPACTO EN SISTEMA: Tarjeta principal quemada
+- EVIDENCIA FÍSICA: Olor a quemado y resina negra.
+
+[31m¡ADVERTENCIA DE SEGURIDAD![0m
+El equipo presenta daños graves en su etapa de potencia. 
+NO CONECTAR A LA RED ELÉCTRICA. Existe riesgo de incendio 
+o daño total del motor.
+
+          Técnico Especialista: Gerardo Martínez
+------------------------------------------------------

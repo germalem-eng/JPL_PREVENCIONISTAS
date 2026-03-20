@@ -1,0 +1,21 @@
+
+[94m██████████████████████████████████████████████████████[0m
+[1m      L.I.N.A. V5.2 - INFORME TÉCNICO DE FALLA CRÍTICA[0m
+[94m██████████████████████████████████████████████████████[0m
+CLIENTE: GERARDO MARTINEZ LEMUS
+EQUIPO: wirpoll Whirlpool Xpert W11036799
+FECHA: 10/03/2026
+------------------------------------------------------
+ANÁLISIS DE DAÑOS:
+- CAUSA RAÍZ: Bomba en corto por filtración.
+- IMPACTO: Etapa de potencia fundida (Triac).
+- EVIDENCIA TÉCNICA: Olor a quemado y resina negra.
+
+[31m¡ADVERTENCIA DE SEGURIDAD![0m
+Se detectó sobrecarga en la etapa de potencia. No conectar 
+a la red eléctrica por riesgo de incendio o daño al motor.
+------------------------------------------------------
+VALOR TOTAL REVISIÓN: $120000
+------------------------------------------------------
+        Técnico Especialista: Gerardo Martínez
+------------------------------------------------------
