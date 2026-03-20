@@ -19,9 +19,9 @@ st.markdown("""
 # --- 2. FUNCIÓN DE NOTIFICACIÓN (CON SUS 16 LETRAS) ---
 def alerta_socio(plan_nombre):
     mi_correo = "germalem@gmail.com"
-    clave_google = "pelmjgainynleacx"  # <--- ¡LISTO! Sus 16 letras aplicadas
+    clave_google = "pelmjgainynleacx" 
     
-    msg = MIMEText(f"Ing. Gerardo, un cliente está interesado en el Plan: {plan_nombre}. \nRecuerde gestionar su 50% de comisión.")
+    msg = MIMEText(f"Ing. Gerardo, un cliente está interesado en el Plan: {plan_nombre}")
     msg['Subject'] = f"🚀 NUEVO INTERESADO JPL - {plan_nombre}"
     msg['From'] = mi_correo
     msg['To'] = mi_correo
@@ -30,8 +30,9 @@ def alerta_socio(plan_nombre):
         server.login(mi_correo, clave_google)
         server.sendmail(mi_correo, mi_correo, msg.as_string())
         server.quit()
-    except:
-        pass 
+        st.toast(f"✅ Notificación enviada a {mi_correo}", icon="📧")
+    except Exception as e:
+        st.error(f"Error técnico en correo: {e}")
 
 # --- 3. SISTEMA DE ACCESO ---
 if 'auth' not in st.session_state: st.session_state['auth'] = False
