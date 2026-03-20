@@ -102,21 +102,27 @@ elif menu == "🛡️ Auditoría 60 Ítems":
 
 elif menu == "💰 Licencias de Uso":
     st.title("💰 Planes de Afiliación")
-    st.info("Al dar clic en adquirir, un asesor se contactará para la vinculación.")
+    st.info("Al dar clic en adquirir, se enviará una notificación y se abrirá WhatsApp.")
     
     col_1, col_2, col_3 = st.columns(3)
+    
     with col_1:
         st.markdown('<div class="price-card"><h3>PEQUEÑA</h3><h2>$40.000</h2><p>1-10 emp.</p></div>', unsafe_allow_html=True)
         if st.button("ADQUIRIR 40K"):
             alerta_socio("Pequeña $40.000")
-            st.markdown(f'<meta http-equiv="refresh" content="0;URL=\'https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Pequeño\'" />', unsafe_allow_html=True)
+            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Pequeño')"
+            st.components.v1.html(f'<script>{js}</script>', height=0)
+
     with col_2:
         st.markdown('<div class="price-card"><h3>MEDIANA</h3><h2>$60.000</h2><p>11-50 emp.</p></div>', unsafe_allow_html=True)
-       if st.button("ADQUIRIR 60K"):
-        alerta_socio("Mediana $60.000")
-        # Esto abre WhatsApp en una pestaña nueva para evitar el error de "Rechazó la conexión"
-        js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Mediano')"
-        st.components.v1.html(f'<script>{js}</script>', height=0)('<div class="price-card"><h3>GRANDE</h3><h2>$100.000</h2><p>+50 emp.</p></div>', unsafe_allow_html=True)
+        if st.button("ADQUIRIR 60K"):
+            alerta_socio("Mediana $60.000")
+            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Mediano')"
+            st.components.v1.html(f'<script>{js}</script>', height=0)
+
+    with col_3:
+        st.markdown('<div class="price-card"><h3>GRANDE</h3><h2>$100.000</h2><p>+50 emp.</p></div>', unsafe_allow_html=True)
         if st.button("ADQUIRIR 100K"):
             alerta_socio("Grande $100.000")
-            st.markdown(f'<meta http-equiv="refresh" content="0;URL=\'https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Grande\'" />', unsafe_allow_html=True)
+            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Grande')"
+            st.components.v1.html(f'<script>{js}</script>', height=0)
