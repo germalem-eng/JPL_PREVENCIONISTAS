@@ -16,11 +16,10 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 2. FUNCIÓN DE NOTIFICACIÓN (CON SUS 16 LETRAS) ---
+# --- 2. FUNCIÓN DE NOTIFICACIÓN ---
 def alerta_socio(plan_nombre):
     mi_correo = "germalem@gmail.com"
-    clave_google = "hbozbfbtcldbycvm" 
-    
+    clave_google = "pelmjgainynleacx" 
     msg = MIMEText(f"Ing. Gerardo, un cliente está interesado en el Plan: {plan_nombre}")
     msg['Subject'] = f"🚀 NUEVO INTERESADO JPL - {plan_nombre}"
     msg['From'] = mi_correo
@@ -51,7 +50,7 @@ if not st.session_state['auth']:
         st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
 
-# --- 4. BARRA LATERAL (CONTACTO Y MENÚ) ---
+# --- 4. BARRA LATERAL ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg")
     st.markdown("### 📞 CONTACTO DIRECTO")
@@ -73,60 +72,37 @@ if menu == "📊 Panel de Control":
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown('<div class="phva-circle">P</div><p style="text-align:center"><b>PLANEAR</b></p>', unsafe_allow_html=True)
-        if st.button("Ver Cronograma"): st.success("📅 Plan de trabajo 2026 activo.")
+        if st.button("Ver Cronograma"): st.success("📅 Plan activo.")
     with c2:
         st.markdown('<div class="phva-circle">H</div><p style="text-align:center"><b>HACER</b></p>', unsafe_allow_html=True)
-        st.file_uploader("Cargar registros SST")
+        st.file_uploader("Cargar registros")
     with c3:
         st.markdown('<div class="phva-circle">V</div><p style="text-align:center"><b>VERIFICAR</b></p>', unsafe_allow_html=True)
-        st.write("Estado de cumplimiento:")
         st.progress(65)
     with c4:
         st.markdown('<div class="phva-circle">A</div><p style="text-align:center"><b>ACTUAR</b></p>', unsafe_allow_html=True)
-        st.text_area("Acciones preventivas:")
+        st.text_area("Acciones:")
 
 elif menu == "🛡️ Auditoría 60 Ítems":
     st.title("🛡️ Auditoría Resolución 0312")
     with st.form("audit_form"):
         col_a, col_b = st.columns(2)
         with col_a:
-            st.selectbox("¿Recursos financieros asignados?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿Seguridad Social al día?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿Capacitación SST ejecutada?", ["Cumple", "No Cumple", "N/A"])
+            st.selectbox("¿Recursos financieros?", ["Cumple", "No Cumple", "N/A"])
+            st.selectbox("¿Seguridad Social?", ["Cumple", "No Cumple", "N/A"])
         with col_b:
-            st.selectbox("¿Evaluaciones médicas vigentes?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿Matriz de peligros actualizada?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿COPASST conformado?", ["Cumple", "No Cumple", "N/A"])
+            st.selectbox("¿Evaluaciones médicas?", ["Cumple", "No Cumple", "N/A"])
+            st.selectbox("¿Matriz de peligros?", ["Cumple", "No Cumple", "N/A"])
         if st.form_submit_button("GENERAR REPORTE"):
-            st.success("Auditoría guardada exitosamente.")
+            st.success("Auditoría guardada.")
 
 elif menu == "💰 Licencias de Uso":
     st.title("💰 Planes de Afiliación")
-    st.info("Al dar clic en adquirir, se enviará una notificación y se abrirá WhatsApp.")
-    
+    st.info("Al dar clic, se enviará un correo y se abrirá WhatsApp.")
     col_1, col_2, col_3 = st.columns(3)
     
     with col_1:
-        st.markdown('<div class="price-card"><h3>PEQUEÑA</h3><h2>$40.000</h2><p>1-10 emp.</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="price-card"><h3>PEQUEÑA</h3><h2>$40.000</h2></div>', unsafe_allow_html=True)
         if st.button("ADQUIRIR 40K"):
             alerta_socio("Pequeña $40.000")
-            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Pequeño')"
-            st.components.v1.html(f'<script>{js}</script>', height=0)
-
-    with col_2:
-        st.markdown('<div class="price-card"><h3>MEDIANA</h3><h2>$60.000</h2><p>11-50 emp.</p></div>', unsafe_allow_html=True)
-        if st.button("ADQUIRIR 60K"):
-            alerta_socio("Mediana $60.000")
-            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Mediano')"
-            st.components.v1.html(f'<script>{js}</script>', height=0)
-
-    with col_3:
-        st.markdown('<div class="price-card"><h3>GRANDE</h3><h2>$100.000</h2><p>+50 emp.</p></div>', unsafe_allow_html=True)
-        if st.button("ADQUIRIR 100K"):
-            alerta_socio("Grande $100.000")
-            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Grande')"
-            st.components.v1.html(f'<script>{js}</script>', height=0)
-        if st.button("ADQUIRIR 100K"):
-            alerta_socio("Grande $100.000")
-            js = f"window.open('https://wa.me/{num_wa}?text=Hola,%20deseo%20afiliarme%20al%20Plan%20Grande')"
-            st.components.v1.html(f'<script>{js}</script>', height=0)
+            js = f"window.open('https://wa.me/{num_wa}?text=Deseo%20el%20Plan%2
