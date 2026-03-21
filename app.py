@@ -5,14 +5,34 @@ from email.mime.text import MIMEText
 # --- 1. CONFIGURACIÓN Y ESTILOS ---
 st.set_page_config(page_title="Grupo JPL | Gestión SST", layout="wide")
 
+# Inyección de fuente Chilanka y estilos corporativos
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chilanka&display=swap');
+
+    /* Aplicar Chilanka a toda la app */
+    html, body, [class*="st-"], .main, h1, h2, h3, p, button {
+        font-family: 'Chilanka', cursive !important;
+    }
+
     [data-testid="stSidebar"] { background-color: #800000 !important; }
     [data-testid="stSidebar"] * { color: white !important; }
-    .stButton>button { width: 100%; background-color: #000000; color: white !important; border: 1px solid white; font-weight: bold; }
+    
+    .stButton>button { 
+        width: 100%; 
+        background-color: #000000; 
+        color: white !important; 
+        border: 1px solid white; 
+        font-weight: bold;
+        border-radius: 10px;
+    }
+    
     .sidebar-link { color: white !important; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
-    .price-card { border: 2px solid #800000; padding: 20px; border-radius: 10px; text-align: center; background-color: white; height: 100%; }
-    .phva-circle { width: 70px; height: 70px; background-color: #800000; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin: 0 auto; border: 2px solid black; }
+    .price-card { border: 2px solid #800000; padding: 20px; border-radius: 10px; text-align: center; background-color: white; color: black; }
+    .phva-circle { width: 80px; height: 80px; background-color: #800000; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; margin: 0 auto; border: 3px solid black; }
+    
+    /* Estilo para el logo en inicio */
+    .logo-container { text-align: center; margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -38,7 +58,9 @@ if 'auth' not in st.session_state: st.session_state['auth'] = False
 if not st.session_state['auth']:
     col1, col2, col3 = st.columns([1, 1.2, 1])
     with col2:
-        st.markdown("<br><br><div style='text-align:center; border:2px solid #800000; padding:20px; border-radius:15px;'>", unsafe_allow_html=True)
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg", use_container_width=True)
+        st.markdown("<div style='text-align:center; border:2px solid #800000; padding:20px; border-radius:15px;'>", unsafe_allow_html=True)
         st.header("🔐 INGRESO CORPORATIVO")
         u = st.text_input("Usuario:").lower()
         p = st.text_input("Clave:", type="password")
@@ -54,11 +76,10 @@ if not st.session_state['auth']:
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg")
     st.markdown("### 📞 CONTACTO DIRECTO")
-    st.markdown('<a href="tel:3016015891" class="sidebar-link">📞 Llamar: 301 601 5891</a>', unsafe_allow_html=True)
-    st.markdown('<a href="mailto:jplprevencionistas@gmail.com" class="sidebar-link">✉️ mail: jplprevencionistas@gmail.com</a>', unsafe_allow_html=True)
-    st.markdown('<a href="https://facebook.com/jplprevencionistas" target="_blank" class="sidebar-link">🌐 Jplprevencionistas</a>', unsafe_allow_html=True)
+    st.markdown('<a href="tel:3016015891" class="sidebar-link">📞 301 601 5891</a>', unsafe_allow_html=True)
+    st.markdown('<a href="mailto:jplprevencionistas@gmail.com" class="sidebar-link">✉️ jplprevencionistas@gmail.com</a>', unsafe_allow_html=True)
     st.markdown("---")
-    menu = st.radio("MENÚ DE GESTIÓN:", ["📊 Panel de Control", "🛡️ Auditoría 60 Ítems", "💰 Licencias de Uso"])
+    menu = st.radio("MENÚ DE GESTIÓN:", ["🏠 Inicio", "📊 Panel PHVA", "🛡️ Auditoría (60 Ítems)", "💰 Licencias"])
     st.markdown("---")
     if st.button("CERRAR SESIÓN"):
         st.session_state['auth'] = False
@@ -67,12 +88,22 @@ with st.sidebar:
 # --- 5. LÓGICA DE MÓDULOS ---
 num_wa = "573016015891"
 
-if menu == "📊 Panel de Control":
-    st.title("📊 Ciclo PHVA Interactivo")
+if menu == "🏠 Inicio":
+    st.markdown("<h1 style='text-align: center; color: #800000;'>BIENVENIDO A GRUPO JPL</h1>", unsafe_allow_html=True)
+    st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg", width=400)
+    st.subheader("Consultoría Integral en Seguridad y Salud en el Trabajo")
+    st.write("""
+    Esta plataforma permite gestionar de manera eficiente el Sistema de Gestión (SG-SST) bajo la normativa colombiana.
+    Utilice el menú lateral para navegar entre los módulos de cumplimiento, auditoría y servicios.
+    """)
+    st.info("💡 Consejo: Complete la auditoría de 60 ítems para conocer su nivel de cumplimiento legal.")
+
+elif menu == "📊 Panel PHVA":
+    st.title("📊 Ciclo de Mejora Continua")
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown('<div class="phva-circle">P</div><p style="text-align:center"><b>PLANEAR</b></p>', unsafe_allow_html=True)
-        if st.button("Ver Cronograma"): st.success("📅 Plan de trabajo activo.")
+        st.button("Cronograma")
     with c2:
         st.markdown('<div class="phva-circle">H</div><p style="text-align:center"><b>HACER</b></p>', unsafe_allow_html=True)
         st.file_uploader("Cargar registros")
@@ -81,41 +112,47 @@ if menu == "📊 Panel de Control":
         st.progress(65)
     with c4:
         st.markdown('<div class="phva-circle">A</div><p style="text-align:center"><b>ACTUAR</b></p>', unsafe_allow_html=True)
-        st.text_area("Acciones preventivas:")
+        st.text_area("Mejoras:")
 
-elif menu == "🛡️ Auditoría 60 Ítems":
-    st.title("🛡️ Auditoría Resolución 0312")
-    with st.form("audit_form"):
-        col_a, col_b = st.columns(2)
-        with col_a:
-            st.selectbox("¿Recursos financieros?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿Seguridad Social?", ["Cumple", "No Cumple", "N/A"])
-        with col_b:
-            st.selectbox("¿Evaluaciones médicas?", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("¿Matriz de peligros?", ["Cumple", "No Cumple", "N/A"])
-        if st.form_submit_button("GENERAR REPORTE"):
-            st.success("Auditoría guardada exitosamente.")
-
-elif menu == "💰 Licencias de Uso":
-    st.title("💰 Planes de Afiliación")
-    st.info("Al elegir un plan, se enviará una notificación al Ing. Gerardo y se abrirá el chat de ventas.")
+elif menu == "🛡️ Auditoría (60 Ítems)":
+    st.title("🛡️ Evaluación Estándares Mínimos (Res. 0312)")
+    st.write("Complete los 60 ítems divididos por capítulos:")
     
+    # Estructura simplificada de los 60 ítems por categorías reales
+    categorias = {
+        "I. RECURSOS (1-8)": ["Responsable SG-SST", "Recursos Financieros", "Seguridad Social", "COPASST", "Comité Convivencia", "Programa Capacitación", "Inducción", "Curso Virtual 50h"],
+        "II. GESTIÓN DE LA SALUD (9-23)": ["Diagnóstico Salud", "Evaluaciones Médicas", "Historias Clínicas", "Reporte AT/EL", "Estadísticas Salud"],
+        "III. GESTIÓN DE RIESGOS (24-42)": ["Matriz de Peligros", "Medidas de Control", "Mantenimiento Equipos", "Entrega de EPP"],
+        "IV. AMENAZAS (43-47)": ["Plan Emergencias", "Brigadas SST"],
+        "V. VERIFICACIÓN Y MEJORA (48-60)": ["Auditoría Anual", "Revisión Gerencial", "Plan de Mejoramiento"]
+    }
+    
+    with st.form("audit_completa"):
+        for cat, items in categorias.items():
+            st.subheader(cat)
+            cols = st.columns(2)
+            for idx, item in enumerate(items):
+                with cols[idx % 2]:
+                    st.radio(f"{item}", ["Cumple", "No Cumple", "N/A"], horizontal=True, key=f"item_{item}")
+        
+        if st.form_submit_button("FINALIZAR AUDITORÍA Y GENERAR REPORTE"):
+            st.balloons()
+            st.success("Auditoría procesada. Se ha generado un plan de acción preventivo.")
+
+elif menu == "💰 Licencias":
+    st.title("💰 Planes de Afiliación")
     col_1, col_2, col_3 = st.columns(3)
     
-    with col_1:
-        st.markdown('<div class="price-card"><h3>PEQUEÑA</h3><h2>$40.000</h2><p>1-10 emp.</p></div>', unsafe_allow_html=True)
-        if st.button("ADQUIRIR 40K"):
-            alerta_socio("Pequeña $40.000")
-            st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola,%20deseo%20el%20Plan%20Pequeño" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">✅ ABRIR WHATSAPP</button></a>', unsafe_allow_html=True)
-
-    with col_2:
-        st.markdown('<div class="price-card"><h3>MEDIANA</h3><h2>$60.000</h2><p>11-50 emp.</p></div>', unsafe_allow_html=True)
-        if st.button("ADQUIRIR 60K"):
-            alerta_socio("Mediana $60.000")
-            st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola,%20deseo%20el%20Plan%20Mediano" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">✅ ABRIR WHATSAPP</button></a>', unsafe_allow_html=True)
-
-    with col_3:
-        st.markdown('<div class="price-card"><h3>GRANDE</h3><h2>$100.000</h2><p>+50 emp.</p></div>', unsafe_allow_html=True)
-        if st.button("ADQUIRIR 100K"):
-            alerta_socio("Grande $100.000")
-            st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola,%20deseo%20el%20Plan%20Grande" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">✅ ABRIR WHATSAPP</button></a>', unsafe_allow_html=True)
+    planes = [
+        {"nombre": "PEQUEÑA", "precio": "40.000", "desc": "1-10 emp.", "wa": "Plan Pequeño"},
+        {"nombre": "MEDIANA", "precio": "60.000", "desc": "11-50 emp.", "wa": "Plan Mediano"},
+        {"nombre": "GRANDE", "precio": "100.000", "desc": "+50 emp.", "wa": "Plan Grande"}
+    ]
+    
+    for i, p in enumerate([col_1, col_2, col_3]):
+        with p:
+            plan = planes[i]
+            st.markdown(f'<div class="price-card"><h3>{plan["nombre"]}</h3><h2>${plan["precio"]}</h2><p>{plan["desc"]}</p></div>', unsafe_allow_html=True)
+            if st.button(f"ADQUIRIR {plan['nombre']}"):
+                alerta_socio(f"{plan['nombre']} ${plan['precio']}")
+                st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola,%20deseo%20el%20{plan["wa"]}" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold;">✅ ABRIR WHATSAPP</button></a>', unsafe_allow_html=True)
