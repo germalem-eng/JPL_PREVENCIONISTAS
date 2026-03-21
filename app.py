@@ -182,4 +182,7 @@ elif menu == "💰 Licencias":
     planes = [("PEQUEÑA", "40.000"), ("MEDIANA", "60.000"), ("GRANDE", "100.000")]
     for i, p in enumerate(col_p):
         with p:
-            st.markdown(f'<div class="price-card"><h3>{planes[i][0]}</h3><h2>${planes[i][1]}</h2></div>', unsafe
+            st.markdown(f'<div class="price-card"><h3>{planes[i][0]}</h3><h2>${planes[i][1]}</h2></div>', unsafe_allow_html=True)
+            if st.button(f"Seleccionar {planes[i][0]}"):
+                alerta_socio(planes[i][0])
+                st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola%20JPL,%20quiero%20el%20plan%20{planes[i][0]}" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">✅ IR A WHATSAPP</button></a>', unsafe_allow_html=True)
