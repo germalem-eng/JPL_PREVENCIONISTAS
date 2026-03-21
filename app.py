@@ -1,188 +1,178 @@
 import streamlit as st
+import time
 import smtplib
 from email.mime.text import MIMEText
 
-# --- 1. CONFIGURACIÓN Y ESTILOS ---
-st.set_page_config(page_title="Grupo JPL | Gestión SST", layout="wide")
+# --- 1. CONFIGURACIÓN Y ESTILO "APP MÓVIL JPL" ---
+st.set_page_config(page_title="Grupo JPL SST", layout="centered")
 
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Chilanka&display=swap');
 
-    /* Aplicar Chilanka de forma global */
-    html, body, [class*="st-"], .main, h1, h2, h3, p, button, label, select, input {
+    /* Fuente Global Chilanka */
+    html, body, [class*="st-"], h1, h2, h3, p, label, .stSelectbox, .stRadio {
         font-family: 'Chilanka', cursive !important;
     }
 
-    /* Sidebar Institucional */
-    [data-testid="stSidebar"] { background-color: #800000 !important; }
-    [data-testid="stSidebar"] * { color: white !important; }
-    
-    /* Botones Corporativos */
-    .stButton>button { 
-        width: 100%; 
-        background-color: #000000; 
-        color: white !important; 
-        border: 1px solid white; 
-        border-radius: 10px;
-        transition: 0.3s;
-    }
-    .stButton>button:hover { background-color: #444444; border: 1px solid #800000; }
+    /* Fondo de la App Gris Muy Claro */
+    .stApp { background-color: #F2F2F2; }
 
-    /* Logo con transparencia */
-    .logo-transparente {
-        opacity: 0.80;
+    /* Logo Transparente con animación */
+    .logo-splash {
         display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 300px;
+        margin: auto;
+        width: 280px;
+        opacity: 0.8;
+        animation: fadeIn 2.5s;
+    }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 0.8;} }
+
+    /* Barra Superior Vinotinto */
+    .top-bar-jpl {
+        background-color: #800000; /* Vinotinto */
+        padding: 20px;
+        border-radius: 0 0 30px 30px;
+        color: white;
+        text-align: center;
+        margin: -65px -20px 25px -20px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
     }
 
-    /* ESTILOS DE CASILLAS (BOXES) */
-    .box-procesos {
-        background-color: #f9f9f9;
+    /* Tarjetas Blancas (Procesos I, II, III) */
+    .card-proceso {
+        background-color: white;
         padding: 20px;
-        border-radius: 12px;
-        border-left: 5px solid #800000;
+        border-radius: 20px;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
         margin-bottom: 20px;
+        border-left: 10px solid #800000; /* Borde Vinotinto */
         color: #333;
     }
 
-    .box-amenazas {
-        background-color: #e0e0e0; /* Gris Ratón Claro */
+    /* Casilla Gris Ratón (Amenazas IV) */
+    .box-amenazas-jpl {
+        background-color: #BEBEBE; /* Gris Ratón */
         padding: 20px;
-        border-radius: 12px;
-        border: 2px dashed #800000;
+        border-radius: 20px;
+        border: 2px solid #800000;
         margin-bottom: 20px;
-        color: #000;
+        color: black;
     }
 
-    .price-card { border: 2px solid #800000; padding: 15px; border-radius: 10px; text-align: center; background: white; color: black; }
+    /* Botones Negros con texto Blanco */
+    .stButton>button {
+        border-radius: 15px;
+        background-color: #000000;
+        color: white !important;
+        border: 1px solid #800000;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: #800000;
+        border: 1px solid #000000;
+    }
+
+    /* Barra de navegación inferior */
+    .nav-bar-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #FFFFFF;
+        padding: 12px;
+        display: flex;
+        justify-content: space-around;
+        border-top: 2px solid #800000;
+        z-index: 999;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 2. NOTIFICACIONES ---
-def alerta_socio(plan_nombre):
-    mi_correo = "germalem@gmail.com"
-    clave_google = "gwjjbwsnynpndaon" 
-    msg = MIMEText(f"Ing. Gerardo, hay un nuevo interesado en el {plan_nombre}")
-    msg['Subject'] = f"🚀 ALERTA JPL - {plan_nombre}"
-    msg['From'] = mi_correo
-    msg['To'] = mi_correo
-    try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.login(mi_correo, clave_google)
-        server.sendmail(mi_correo, mi_correo, msg.as_string())
-        server.quit()
-        st.toast("Notificación enviada al Ing. Gerardo", icon="📧")
-    except: pass
+# --- 2. LÓGICA DE NAVEGACIÓN ---
+if 'pantalla' not in st.session_state:
+    st.session_state.pantalla = 'splash'
 
-# --- 3. ACCESO ---
-if 'auth' not in st.session_state: st.session_state['auth'] = False
-if not st.session_state['auth']:
-    col1, col2, col3 = st.columns([1, 1.2, 1])
-    with col2:
-        st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg", use_container_width=True)
-        with st.container(border=True):
-            st.header("🔐 ACCESO JPL")
-            u = st.text_input("Usuario").lower()
-            p = st.text_input("Clave", type="password")
-            if st.button("INGRESAR"):
-                if u == "gerardo" and p == "mym2007":
-                    st.session_state['auth'] = True
-                    st.rerun()
-                else: st.error("Credenciales incorrectas")
-    st.stop()
+# --- 3. PANTALLA 1: SPLASH SCREEN (LOGO TRANSPARENTE) ---
+if st.session_state.pantalla == 'splash':
+    st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+    st.markdown('<img src="https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg" class="logo-splash">', unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align:center; color:#800000;'>Cargando Sistema JPL...</h2>", unsafe_allow_html=True)
+    time.sleep(3) 
+    st.session_state.pantalla = 'inicio'
+    st.rerun()
 
-# --- 4. NAVEGACIÓN ---
-with st.sidebar:
-    st.image("https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg")
-    st.markdown("---")
-    menu = st.sidebar.radio("MENÚ DE GESTIÓN", ["🏠 Inicio", "🛡️ Auditoría 60 Ítems", "💰 Licencias"])
-    if st.button("SALIR"):
-        st.session_state['auth'] = False
+# --- 4. PANTALLA 2: HOME (ESTILO APP) ---
+elif st.session_state.pantalla == 'inicio':
+    st.markdown('<div class="top-bar-jpl"><h2>GRUPO JPL</h2><p>Gestión SST Integral</p></div>', unsafe_allow_html=True)
+    
+    # Tarjeta de Resumen
+    st.markdown(f"""
+    <div class="card-proceso">
+        <p style='color:grey; margin-bottom:0;'>ESTADO DE CUMPLIMIENTO</p>
+        <h2 style='margin-top:0; color:#800000;'>65% GLOBAL</h2>
+        <div style='background-color:#e0e0e0; border-radius:10px; height:10px; width:100%;'>
+            <div style='background-color:#800000; height:10px; width:65%; border-radius:10px;'></div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("### ACCESOS RÁPIDOS")
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("🛡️ AUDITORÍA"):
+            st.session_state.pantalla = 'auditoria'
+            st.rerun()
+    with c2:
+        if st.button("💰 PLANES"):
+            st.session_state.pantalla = 'licencias'
+            st.rerun()
+
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+# --- 5. PANTALLA 3: AUDITORÍA 60 ÍTEMS ---
+elif st.session_state.pantalla == 'auditoria':
+    st.markdown('<div class="top-bar-jpl"><h3>AUDITORÍA 0312</h3></div>', unsafe_allow_html=True)
+    if st.button("⬅️ VOLVER AL INICIO"):
+        st.session_state.pantalla = 'inicio'
         st.rerun()
 
-# --- 5. MÓDULOS ---
-num_wa = "573016015891"
+    # BLOQUE I, II, III (Tarjeta Blanca/Vinotinto)
+    st.markdown('<div class="card-proceso">', unsafe_allow_html=True)
+    st.subheader("I, II y III: PROCESOS BASE")
+    st.selectbox("1.1.1 Asignación de Responsable", ["Cumple", "No Cumple", "N/A"])
+    st.selectbox("2.2.1 Evaluaciones Médicas", ["Cumple", "No Cumple", "N/A"])
+    st.selectbox("3.1.1 Matriz de Peligros", ["Cumple", "No Cumple", "N/A"])
+    st.markdown('</div>', unsafe_allow_html=True)
 
-if menu == "🏠 Inicio":
-    st.markdown('<img src="https://raw.githubusercontent.com/germalem-eng/grupo_jpl_ap/main/Logos/foto_logo_jpl.jpg" class="logo-transparente">', unsafe_allow_html=True)
-    st.markdown("<h1 style='text-align:center; color:#800000;'>GRUPO JPL</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align:center;'>Consultoría Especializada en SST</h3>", unsafe_allow_html=True)
-    st.write("Bienvenido al entorno digital para la administración de la Resolución 0312 de 2019.")
-
-elif menu == "🛡️ Auditoría 60 Ítems":
-    st.title("🛡️ Auditoría Completa - Res. 0312")
+    # BLOQUE IV: AMENAZAS (Tarjeta Gris Ratón)
+    st.markdown('<div class="box-amenazas-jpl">', unsafe_allow_html=True)
+    st.subheader("IV. AMENAZAS (Ítems 43-47)")
+    st.radio("43. Plan de Emergencias", ["Cumple", "No Cumple"], horizontal=True)
+    st.radio("44. Brigadas de Respuesta", ["Cumple", "No Cumple"], horizontal=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     
-    with st.form("audit_completa"):
-        
-        # --- BLOQUE I: RECURSOS ---
-        st.markdown('<div class="box-procesos">', unsafe_allow_html=True)
-        st.subheader("I. RECURSOS (Ítems 1-8)")
-        c1, c2 = st.columns(2)
-        with c1:
-            st.selectbox("1.1.1 Responsable del SG-SST", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("1.1.3 Asignación de Recursos", ["Cumple", "No Cumple", "N/A"])
-        with c2:
-            st.selectbox("1.1.5 Pago Seguridad Social", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("1.2.1 Programa de Capacitación", ["Cumple", "No Cumple", "N/A"])
-        st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("💾 GUARDAR AVANCE"):
+        st.success("Información almacenada.")
 
-        # --- BLOQUE II: SALUD ---
-        st.markdown('<div class="box-procesos">', unsafe_allow_html=True)
-        st.subheader("II. GESTIÓN DE LA SALUD (Ítems 9-23)")
-        c3, c4 = st.columns(2)
-        with c3:
-            st.selectbox("2.1.1 Descripción Sociodemográfica", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("2.2.1 Evaluaciones Médicas", ["Cumple", "No Cumple", "N/A"])
-        with c4:
-            st.selectbox("2.3.1 Reporte de AT y EL", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("2.4.1 Registro de Estadísticas", ["Cumple", "No Cumple", "N/A"])
-        st.markdown('</div>', unsafe_allow_html=True)
+# --- 6. PANTALLA 4: LICENCIAS ---
+elif st.session_state.pantalla == 'licencias':
+    st.markdown('<div class="top-bar-jpl"><h3>NUESTROS PLANES</h3></div>', unsafe_allow_html=True)
+    if st.button("⬅️ VOLVER"):
+        st.session_state.pantalla = 'inicio'
+        st.rerun()
+    
+    st.markdown('<div class="card-proceso" style="text-align:center;"><h3>PLAN EMPRESA</h3><h2>$60.000</h2><p>Hasta 50 empleados</p></div>', unsafe_allow_html=True)
+    if st.button("ADQUIRIR POR WHATSAPP"):
+        st.info("Conectando con asesor...")
 
-        # --- BLOQUE III: RIESGOS ---
-        st.markdown('<div class="box-procesos">', unsafe_allow_html=True)
-        st.subheader("III. GESTIÓN DE RIESGOS (Ítems 24-42)")
-        c5, c6 = st.columns(2)
-        with c5:
-            st.selectbox("3.1.1 Identificación de Peligros", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("3.2.1 Inspecciones de Seguridad", ["Cumple", "No Cumple", "N/A"])
-        with c6:
-            st.selectbox("3.3.1 Mantenimiento de Equipos", ["Cumple", "No Cumple", "N/A"])
-            st.selectbox("3.4.1 Entrega de EPP", ["Cumple", "No Cumple", "N/A"])
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        # --- BLOQUE IV: AMENAZAS (GRIS RATÓN) ---
-        st.markdown('<div class="box-amenazas">', unsafe_allow_html=True)
-        st.subheader("IV. AMENAZAS (Ítems 43-47)")
-        st.write("⚠️ *Preparación ante Emergencias*")
-        c7, c8 = st.columns(2)
-        with c7:
-            st.radio("43. Plan de Emergencias", ["Cumple", "No Cumple"], horizontal=True)
-            st.radio("44. Conformación de Brigada", ["Cumple", "No Cumple"], horizontal=True)
-        with c8:
-            st.radio("45. Capacitación en Emergencias", ["Cumple", "No Cumple"], horizontal=True)
-            st.radio("46. Realización de Simulacros", ["Cumple", "No Cumple"], horizontal=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        # --- BLOQUE V: MEJORA ---
-        st.markdown('<div class="box-procesos">', unsafe_allow_html=True)
-        st.subheader("V. VERIFICACIÓN Y MEJORA (Ítems 48-60)")
-        st.selectbox("5.1.1 Auditoría Anual", ["Cumple", "No Cumple", "N/A"])
-        st.selectbox("6.1.1 Plan de Mejoramiento", ["Cumple", "No Cumple", "N/A"])
-        st.markdown('</div>', unsafe_allow_html=True)
-
-        if st.form_submit_button("💾 GUARDAR AUDITORÍA"):
-            st.success("Evaluación guardada con éxito.")
-
-elif menu == "💰 Licencias":
-    st.title("💰 Planes de Afiliación")
-    col_p = st.columns(3)
-    planes = [("PEQUEÑA", "40.000"), ("MEDIANA", "60.000"), ("GRANDE", "100.000")]
-    for i, p in enumerate(col_p):
-        with p:
-            st.markdown(f'<div class="price-card"><h3>{planes[i][0]}</h3><h2>${planes[i][1]}</h2></div>', unsafe_allow_html=True)
-            if st.button(f"Seleccionar {planes[i][0]}"):
-                alerta_socio(planes[i][0])
-                st.markdown(f'<a href="https://wa.me/{num_wa}?text=Hola%20JPL,%20quiero%20el%20plan%20{planes[i][0]}" target="_blank" style="text-decoration:none;"><button style="width:100%; background-color:#25D366; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">✅ IR A WHATSAPP</button></a>', unsafe_allow_html=True)
+# --- BARRA DE NAVEGACIÓN FIJA ---
+st.markdown(f"""
+<div class="nav-bar-footer">
+    <div style="text-align:center; color:#800000; font-size:12px;"><b>🏠<br>INICIO</b></div>
+    <div style="text-align:center; color:#A9A9A9; font-size:12px;"><b>🛡️<br>SST</b></div>
+    <div style="text-align:center; color:#A9A9A9; font-size:12px;"><b>📊<br>REPORTES</b></div>
+    <div style="text-align:center; color:#A9A9A9; font-size:12px;"><b>⚙️<br>AJUSTES</b></div>
+</div>
+""", unsafe_allow_html=True)
