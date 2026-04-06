@@ -10,29 +10,41 @@ st.set_page_config(page_title="App JPL - Gestión SST", layout="wide")
 # --- TRUCO DE DISEÑO PARA BOTONES Y TEXTO ---
 st.markdown("""
     <style>
-    /* 1. Color del texto que escribes en los cuadros (Usuario/Clave) */
+    /* 1. Fondo general de la barra lateral (Sidebar) */
+    [data-testid="stSidebar"] {
+        background-color: #8B0000 !important;
+    }
+
+    /* 2. Cuadros de texto (Usuario y Clave) */
+    div[data-baseweb="input"] {
+        background-color: white !important;
+        border-radius: 5px !important;
+    }
+    
     input {
-        color: #000000 !important; /* Texto Negro */
-        background-color: #FFFFFF !important; /* Fondo Blanco */
+        color: black !important; /* Texto que escribes en negro */
+        -webkit-text-fill-color: black !important;
     }
 
-    /* 2. Arreglar los botones en el menú lateral (ACCEDER, INICIO, ESTADÍSTICAS) */
-    .stButton>button {
-        color: #8B0000 !important; /* Letras Rojo Oscuro */
-        background-color: #FFFFFF !important; /* Fondo Blanco */
-        border: 2px solid #8B0000 !important;
-        font-weight: bold !important;
-        width: 100%;
+    /* 3. BOTONES (Acceder, Inicio, Estadísticas) */
+    /* Esto obliga a que el botón sea BLANCO con letras NEGRAS */
+    .stButton > button {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        border: 1px solid #000000 !important;
+        border-radius: 5px !important;
+        height: 3em !important;
+        width: 100% !important;
+        visibility: visible !important;
     }
 
-    /* 3. Color de las etiquetas (Usuario / Clave) sobre el fondo rojo */
+    /* 4. Etiquetas de texto (Usuario / Clave) */
     .stWidgetLabel p {
-        color: #FFFFFF !important; /* Blanco */
-        font-size: 1.1rem !important;
+        color: white !important;
+        font-weight: bold !important;
     }
     </style>
     """, unsafe_allow_html=True)
-
 # --- 2. BASE DE DATOS TÉCNICA (EXTRAÍDA DE TUS APUNTES) ---
 # Estándares adicionales del cuaderno
 E_7 = [
