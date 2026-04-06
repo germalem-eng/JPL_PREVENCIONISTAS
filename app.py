@@ -7,6 +7,32 @@ from datetime import datetime
 # --- 1. CONFIGURACIÓN ---
 st.set_page_config(page_title="App JPL - Gestión SST", layout="wide")
 
+# --- TRUCO DE DISEÑO PARA BOTONES Y TEXTO ---
+st.markdown("""
+    <style>
+    /* 1. Color del texto que escribes en los cuadros (Usuario/Clave) */
+    input {
+        color: #000000 !important; /* Texto Negro */
+        background-color: #FFFFFF !important; /* Fondo Blanco */
+    }
+
+    /* 2. Arreglar los botones en el menú lateral (ACCEDER, INICIO, ESTADÍSTICAS) */
+    .stButton>button {
+        color: #8B0000 !important; /* Letras Rojo Oscuro */
+        background-color: #FFFFFF !important; /* Fondo Blanco */
+        border: 2px solid #8B0000 !important;
+        font-weight: bold !important;
+        width: 100%;
+    }
+
+    /* 3. Color de las etiquetas (Usuario / Clave) sobre el fondo rojo */
+    .stWidgetLabel p {
+        color: #FFFFFF !important; /* Blanco */
+        font-size: 1.1rem !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # --- 2. BASE DE DATOS TÉCNICA (EXTRAÍDA DE TUS APUNTES) ---
 # Estándares adicionales del cuaderno
 E_7 = [
