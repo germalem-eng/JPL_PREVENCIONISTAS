@@ -1,6 +1,3 @@
-# Este flujo instala dependencias y revisa errores de sintaxis en Python
-# Hemos desactivado pytest por ahora para que no te marque error (X roja)
-
 name: Python application
 
 on:
@@ -14,25 +11,29 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+    # Actualizado a v4 para evitar advertencias de Node
     - uses: actions/checkout@v4
+    
+    # Actualizado a v5 para total compatibilidad con Node 24
     - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: "3.10"
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
     - name: Lint with flake8
       run: |
-        # Detiene el proceso si hay errores de sintaxis graves
+        # Detiene el proceso solo si hay errores críticos de sintaxis
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Estos son solo advertencias, no detendrán el proceso
+        # Estos son solo avisos de estilo, no bloquean el proceso
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    # El paso de pytest ha sido removido para evitar el error "collected 0 items"
+
+    # Hemos quitado pytest para eliminar el "Exit code 5"
