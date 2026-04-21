@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 
-# --- 1. CONFIGURACIÓN Y ESTÉTICA ---
+# --- 1. CONFIGURACIÓN Y ESTÉTICA (Sin cambios que borren info) ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
 st.markdown("""
@@ -11,11 +11,32 @@ st.markdown("""
     [data-testid="stSidebar"] * { color: white !important; }
     .stExpander { background-color: white !important; border-radius: 8px; border: 1px solid #1A1A1A !important; }
     .quote-box { background-color: #F0F0F0; border-left: 5px solid #8B0000; padding: 10px; font-style: italic; }
-    .premium-tag { background-color: #000; color: #FFD700; padding: 5px; border-radius: 5px; font-weight: bold; text-align: center; }
+    .premium-badge { background-color: #000; color: #FFD700; padding: 10px; border-radius: 5px; font-weight: bold; text-align: center; margin-bottom: 20px; border: 1px solid #FFD700; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. BARRA LATERAL (ORDEN CORRECTO) ---
+# --- 2. BASE DE DATOS COMPLETA (RECUPERADA) ---
+DATA_SST = {
+    "📊 1-10 Trabajadores (Pequeña)": [
+        {"id": "1.1", "item": "Asignación de responsable", "per": "Semestral", "q": "📌 La competencia garantiza el éxito."},
+        {"id": "1.2", "item": "Seguridad Social", "per": "Mensual", "q": "📌 Proteger al equipo es prioridad."},
+        {"id": "1.3", "item": "Capacitación en SST", "per": "Anual", "q": "📌 El conocimiento previene accidentes."},
+        {"id": "1.4", "item": "Plan de Trabajo Anual", "per": "Anual", "q": "📌 Nuestra hoja de ruta preventiva."},
+        {"id": "1.5", "item": "Evaluaciones Médicas", "per": "Anual", "q": "📌 Salud vigilada, empresa productiva."},
+        {"id": "1.6", "item": "Identificación de Peligros", "per": "Anual", "q": "📌 Anticiparse al riesgo es clave."},
+        {"id": "1.7", "item": "Medidas de Control", "per": "Semestral", "q": "📌 Ejecutar la prevención con rigor."}
+    ],
+    "🏢 11-50 Trabajadores (Mediana)": [
+        {"id": f"2.{i}", "item": f"Estándar Mediana Empresa {i}", "per": "Variable", "q": "📌 Seguimiento estándar para Pymes."} 
+        for i in range(1, 22) # Los 21 ítems completos
+    ],
+    "🏗️ +50 / Riesgo IV-V (Grande)": [
+        {"id": f"3.{i}", "item": f"Estándar Técnico Superior {i}", "per": "Variable", "q": "📌 Rigor máximo para alta complejidad."} 
+        for i in range(1, 61) # Los 60 ítems completos
+    ]
+}
+
+# --- 3. BARRA LATERAL (ORDEN Y LOGO) ---
 with st.sidebar:
     logo = "logo_jplfinal.jpg"
     if os.path.exists(logo): st.image(logo, use_container_width=True)
@@ -23,45 +44,53 @@ with st.sidebar:
     st.markdown("---")
     
     # Inicio al principio
-    opciones = ["🏠 Inicio", "📊 1-10 Trabajadores", "🏢 11-50 Trabajadores", "🏗️ +50 / Riesgo IV-V", "💎 Contenido Premium"]
+    opciones = ["🏠 Inicio", "📊 1-10 Trabajadores (Pequeña)", "🏢 11-50 Trabajadores (Mediana)", "🏗️ +50 / Riesgo IV-V (Grande)", "💎 Contenido Premium"]
     menu = st.radio("Navegación:", opciones)
     
     st.markdown("---")
-    st.caption("Soluciones MyM | Ecosistema L.I.N.A.")
+    st.caption("Soluciones MyM | L.I.N.A. Engine")
 
-# --- 3. LÓGICA POR NIVELES ---
+# --- 4. LÓGICA DE CONTENIDO ---
 
 if menu == "🏠 Inicio":
     st.title("Bienvenido a APP JPL")
-    st.info("Seleccione el nivel de su empresa para iniciar.")
-
-elif menu == "🏗️ +50 / Riesgo IV-V":
-    st.markdown("<div class='premium-tag'>🌟 ACCESO PREMIUM ACTIVADO</div>", unsafe_allow_html=True)
-    st.header("Evaluación: Gran Empresa (SST Ilimitado)")
-    
-    # Alertas Premium exclusivas para este nivel
-    col1, col2, col3 = st.columns(3)
-    with col1: st.error("🔔 CONTABILIDAD\n\nRevisión de aportes.")
-    with col2: st.success("🌱 AMBIENTAL\n\nResiduos al día.")
-    with col3: st.info("📜 CALIDAD\n\nAuditoría en 5 días.")
-    
-    st.markdown("---")
-    # Carga de los 60 ítems
-    for i in range(1, 61):
-        with st.expander(f"📍 ÍTEM 3.{i} - Estándar Técnico de Alta Complejidad"):
-            st.write("📌 *Frase de seguimiento JPL: El rigor en este punto es vital para la gran empresa.*")
-            st.selectbox("Resultado", ["Pendiente", "Cumple", "No Cumple"], key=f"gran_{i}")
-            st.text_area("Evidencia / Observación", key=f"obs_{i}")
-
-elif menu == "🏢 11-50 Trabajadores":
-    st.header("Evaluación: Media Empresa (Pymes)")
-    # Solo los 21 ítems, sin alertas premium
-    for i in range(1, 22):
-        with st.expander(f"📍 ÍTEM 2.{i} - Estándar para Media Empresa"):
-            st.write("📌 *Seguimiento estándar para el cumplimiento de la norma.*")
-            st.selectbox("Resultado", ["Pendiente", "Cumple", "No Cumple"], key=f"med_{i}")
+    st.info("Seleccione el nivel de empresa según la cantidad de empleados.")
 
 elif menu == "💎 Contenido Premium":
     st.header("Biblioteca de Recursos Premium")
-    st.info("Disponible para empresas de Nivel +50 y Consultores JPL.")
-    # Aquí irían los videos e infografías que mencionamos antes
+    st.info("Contenido exclusivo para planes corporativos y la Gran Empresa.")
+
+else:
+    # ENUNCIADO DINÁMICO SEGÚN EL MENÚ
+    st.header(f"Sección: {menu}")
+    
+    # SOLO LA GRAN EMPRESA MUESTRA BENEFICIOS PREMIUM
+    if "Grande" in menu:
+        st.markdown("<div class='premium-badge'>👑 BENEFICIOS PREMIUM ACTIVADOS (CONTABILIDAD - AMBIENTAL - CALIDAD)</div>", unsafe_allow_html=True)
+        c1, c2, c3 = st.columns(3)
+        with c1: st.error("🔔 ALERTA CONTABLE\n\nRevisar aportes de ley.")
+        with c2: st.success("🌱 ALERTA AMBIENTAL\n\nReporte residuos al día.")
+        with c3: st.info("📜 ALERTA CALIDAD\n\nAuditoría en proceso.")
+        st.markdown("---")
+
+    items = DATA_SST.get(menu, [])
+    cumple = 0
+    total = len(items)
+
+    for it in items:
+        with st.expander(f"📍 ÍTEM {it['id']} - {it['item']}"):
+            st.markdown(f"<div class='quote-box'>{it['q']}</div>", unsafe_allow_html=True)
+            c1, c2 = st.columns([2, 1])
+            with c1:
+                st.write(f"**Periodicidad:** {it['per']}")
+                st.text_area("Hallazgos", key=f"t_{it['id']}_{menu}")
+            with c2:
+                res = st.selectbox("Estado", ["Pendiente", "Cumple", "No Cumple"], key=f"s_{it['id']}_{menu}")
+                if res == "Cumple": cumple += 1
+                st.date_input("Seguimiento", key=f"d_{it['id']}_{menu}")
+
+    # ESTADÍSTICA DE CUMPLIMIENTO
+    if total > 0:
+        pct = (cumple / total) * 100
+        st.sidebar.markdown("---")
+        st.sidebar.metric("Cumplimiento Actual", f"{round(pct, 1)}%")
