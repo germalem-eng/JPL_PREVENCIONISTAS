@@ -81,12 +81,38 @@ with st.sidebar:
 # --- 5. LÓGICA DE CONTENIDO ---
 if menu == "🏠 Inicio":
     st.title("Bienvenido a APP JPL")
-    st.info("Seleccione un nivel de empresa en el menú lateral para realizar la evaluación.")
+    st.markdown(f"""
+    <div style="background-color: white; padding: 25px; border-left: 10px solid #000; border-right: 10px solid #8B0000; border-radius: 5px;">
+        <h3>Sistema de Gestión de Estándares Mínimos</h3>
+        <p style="color: #4A4A4A;">Herramienta técnica para la auditoría de la <b>Resolución 0312</b>.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 elif menu == "💎 Contenido Premium":
-    st.header("Biblioteca Premium")
-    st.write("Contenido exclusivo para clientes de JPL Prevencionistas.")
+    st.header("💎 Biblioteca de Recursos Premium")
+    st.info("Este espacio contiene material exclusivo de apoyo para la implementación del SG-SST.")
+    
+    tab1, tab2, tab3 = st.tabs(["🎬 Videos de Inducción", "📊 Infografías", "🔔 Alertas Legales"])
+    
+    with tab1:
+        st.subheader("Capacitación y Sensibilización")
+        # Aquí puedes poner enlaces a YouTube o archivos locales
+        st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Reemplazar con video real de JPL
+        st.write("📌 *Video 1: Introducción a la Seguridad y Salud en el Trabajo.*")
 
+    with tab2:
+        st.subheader("Material Visual para Trabajadores")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image("https://via.placeholder.com/400x300.png?text=Infografia+EPP", caption="Uso correcto de EPP")
+        with col2:
+            st.image("https://via.placeholder.com/400x300.png?text=Pausas+Activas", caption="Guía de Pausas Activas")
+
+    with tab3:
+        st.subheader("Alertas y Normatividad")
+        st.warning("⚠️ Nueva circular sobre Riesgos Psicosociales - Abril 2026")
+        st.write("Descargue aquí la actualización de la matriz legal para este mes.")
+        st.button("Descargar PDF Informativo")
 else:
     # EL TÍTULO AHORA SE SINCRONIZA CORRECTAMENTE
     st.header(f"Sección Seleccionada: {menu}")
