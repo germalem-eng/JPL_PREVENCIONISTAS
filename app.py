@@ -58,16 +58,26 @@ DATA_SST = {
     ]
 }
 
-# --- 4. BARRA LATERAL (INICIO AL PRINCIPIO) ---
+# --- 4. BARRA LATERAL (INICIO AL PRINCIPIO CON LOGO) ---
 with st.sidebar:
+    # Ruta del logo que tienes en GitHub
+    logo_path = "logo_jplfinal.jpg"
+    
+    if os.path.exists(logo_path):
+        st.image(logo_path, use_container_width=True)
+    else:
+        # Mensaje discreto por si el archivo no carga
+        st.warning("Suba 'logo_jplfinal.jpg' a GitHub")
+        
     st.markdown("<h1 style='text-align: center; font-size: 24px;'>APLICACIÓN JPL</h1>", unsafe_allow_html=True)
     st.markdown("---")
-    # Se define Inicio primero en la lista de opciones
+    
+    # El orden que pediste: Inicio siempre de primero
     opciones = ["🏠 Inicio", "📊 1-10 Trabajadores", "🏢 11-50 Trabajadores", "🏗️ +50 / Riesgo IV-V", "💎 Contenido Premium"]
-    menu = st.radio("Navegación:", opciones)
+    menu = st.radio("Navegación:", opciones, key="menu_principal")
+    
     st.markdown("---")
     st.caption("Soluciones MyM | Ecosistema L.I.N.A.")
-
 # --- 5. LÓGICA DE CONTENIDO ---
 if menu == "🏠 Inicio":
     st.title("Bienvenido a APP JPL")
