@@ -4,18 +4,84 @@ import os
 # --- 1. CONFIGURACIÓN E IDENTIDAD ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
-# --- 2. ESTILO CORPORATIVO (Vinotinto, Negro, Gris) ---
+# --- 2. ESTILO CORPORATIVO AVANZADO (L.I.N.A. Engine) ---
 st.markdown("""
     <style>
-    .stApp { background-color: #D9D9D9; } 
-    [data-testid="stSidebar"] { background-color: #8B0000 !important; border-right: 5px solid #1A1A1A; } 
-    [data-testid="stSidebar"] * { color: white !important; }
-    .stExpander { background-color: white !important; border-radius: 8px; border: 1px solid #1A1A1A !important; margin-bottom: 10px; }
-    .motivation-box { background-color: #FDF2F2; border-left: 5px solid #8B0000; padding: 15px; font-style: italic; color: #1A1A1A; border-radius: 5px; margin-bottom: 10px; font-size: 0.9em; }
-    .premium-lock { background-color: #1A1A1A; color: #FFD700; padding: 20px; border-radius: 10px; border: 2px solid #FFD700; text-align: center; }
+    /* 1. Fondo y Tipografía General */
+    .stApp {
+        background-color: #D9D9D9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* 2. Barra Lateral (Sidebar) Personalizada */
+    [data-testid="stSidebar"] {
+        background-color: #8B0000 !important; /* Vinotinto */
+        border-right: 5px solid #1A1A1A; /* Negro */
+    }
+    
+    /* Color de texto en Sidebar */
+    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] label, [data-testid="stSidebar"] p {
+        color: white !important;
+    }
+
+    /* 3. Ocultar menús de "Página Web" para que parezca App Nativa */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    /* 4. Tarjetas de Ítems (Expanders) */
+    .stExpander {
+        background-color: white !important;
+        border-radius: 15px !important;
+        border: 1px solid #1A1A1A !important;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* 5. Frases de Motivación (Diseño especial) */
+    .motivation-box {
+        background: linear-gradient(90deg, #8B0000 0%, #1A1A1A 100%);
+        color: #FFD700 !important; /* Dorado */
+        padding: 15px;
+        border-radius: 10px;
+        font-style: italic;
+        margin-bottom: 15px;
+        border-left: 8px solid #FFD700;
+        font-weight: 500;
+    }
+
+    /* 6. Botones Premium y Formularios */
+    .stButton>button {
+        background-color: #1A1A1A !important;
+        color: #FFD700 !important;
+        border: 2px solid #FFD700 !important;
+        border-radius: 10px !important;
+        width: 100%;
+        transition: 0.3s;
+    }
+    
+    .stButton>button:hover {
+        background-color: #FFD700 !important;
+        color: #1A1A1A !important;
+    }
+
+    /* 7. Barra de Progreso (Línea de Tiempo) */
+    .stProgress > div > div > div > div {
+        background-color: #8B0000 !important;
+    }
+
+    /* 8. Zona Premium Bloqueada */
+    .premium-lock {
+        background-color: #1A1A1A;
+        color: #FFD700;
+        padding: 30px;
+        border-radius: 20px;
+        border: 3px solid #8B0000;
+        text-align: center;
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.3);
+    }
     </style>
     """, unsafe_allow_html=True)
-
 # --- 3. BASE DE DATOS (7, 21 Y 60 ÍTEMS CON FRASES DE MOTIVACIÓN) ---
 DATA_SST = {
     "📊 1-10 Trabajadores (Pequeña)": [
