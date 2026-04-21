@@ -1,0 +1,16 @@
+{
+  "name": "JPL Gestión SST",
+  "short_name": "APP JPL",
+  "description": "Sistema de Gestión JPL Prevencionistas SAS",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#D9D9D9",
+  "theme_color": "#8B0000",
+  "icons": [
+    {
+      "src": "logo_jplfinal.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    }
+  ]
+}
