@@ -4,32 +4,38 @@ import os
 # --- 1. CONFIGURACIÓN E IDENTIDAD ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
-# --- 2. ESTILO CORPORATIVO (AJUSTE DE ALTURA) ---
+# --- 2. ESTILO CORPORATIVO (CONSOLIDADO FINAL) ---
 st.markdown("""
     <style>
-    /* 1. Eliminar el espacio muerto arriba para que suba el título */
-    [data-testid="stHeader"] {
-        display: none !important;
-    }
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-        margin-top: -30px !important; /* Fuerza el título hacia arriba */
-    }
-
-    /* 2. Limpieza de menús y footer */
+    /* 1. Limpieza de interfaz para que parezca App */
+    [data-testid="stHeader"] { display: none !important; }
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* 3. Estilo de los ítems (Expanders) */
-    .stExpander {
-        border-radius: 12px !important;
-        border: 1px solid #1A1A1A !important;
-        margin-bottom: 10px !important;
+    /* 2. Ajuste de altura para móviles (sube el contenido) */
+    .block-container {
+        padding-top: 0rem !important;
+        margin-top: -30px !important;
     }
-    
-    /* 4. Frases de Motivación JPL */
+
+    /* 3. Ajuste del LOGO en la Sidebar (El toque profesional) */
+    [data-testid="stSidebar"] img {
+        margin-top: 30px !important; 
+        margin-bottom: 20px !important;
+        border-radius: 15px; 
+        border: 2px solid #1A1A1A; 
+        padding: 5px;
+        background-color: white; 
+    }
+
+    /* 4. Estilo de los Ítems (Expanders) */
+    .stExpander { 
+        border-radius: 12px !important; 
+        border: 1px solid #1A1A1A !important;
+    }
+
+    /* 5. Frases de Motivación (Dorado y Negro) */
     .motivation-box {
         background: linear-gradient(90deg, #1A1A1A 0%, #444 100%);
         color: #FFD700 !important;
@@ -40,6 +46,7 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+
 # --- 3. BASE DE DATOS (7, 21 Y 60 ÍTEMS CON FRASES DE MOTIVACIÓN) ---
 DATA_SST = {
     "📊 1-10 Trabajadores (Pequeña)": [
