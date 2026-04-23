@@ -4,81 +4,39 @@ import os
 # --- 1. CONFIGURACIÓN E IDENTIDAD ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
-# --- 2. ESTILO CORPORATIVO AVANZADO (L.I.N.A. Engine) ---
+# --- 2. ESTILO CORPORATIVO (AJUSTE DE ALTURA) ---
 st.markdown("""
     <style>
-    /* 1. Fondo y Tipografía General */
-    .stApp {
-        background-color: #D9D9D9;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* 1. Eliminar el espacio muerto arriba para que suba el título */
+    [data-testid="stHeader"] {
+        display: none !important;
+    }
+    .block-container {
+        padding-top: 0rem !important;
+        padding-bottom: 0rem !important;
+        margin-top: -30px !important; /* Fuerza el título hacia arriba */
     }
 
-    /* 2. Barra Lateral (Sidebar) Personalizada */
-    [data-testid="stSidebar"] {
-        background-color: #8B0000 !important; /* Vinotinto */
-        border-right: 5px solid #1A1A1A; /* Negro */
-    }
-    
-    /* Color de texto en Sidebar */
-    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] label, [data-testid="stSidebar"] p {
-        color: white !important;
-    }
-
-    /* 3. Ocultar menús de "Página Web" para que parezca App Nativa */
+    /* 2. Limpieza de menús y footer */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* 4. Tarjetas de Ítems (Expanders) */
+    /* 3. Estilo de los ítems (Expanders) */
     .stExpander {
-        background-color: white !important;
-        border-radius: 15px !important;
+        border-radius: 12px !important;
         border: 1px solid #1A1A1A !important;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
-        margin-bottom: 15px !important;
-    }
-
-    /* 5. Frases de Motivación (Diseño especial) */
-    .motivation-box {
-        background: linear-gradient(90deg, #8B0000 0%, #1A1A1A 100%);
-        color: #FFD700 !important; /* Dorado */
-        padding: 15px;
-        border-radius: 10px;
-        font-style: italic;
-        margin-bottom: 15px;
-        border-left: 8px solid #FFD700;
-        font-weight: 500;
-    }
-
-    /* 6. Botones Premium y Formularios */
-    .stButton>button {
-        background-color: #1A1A1A !important;
-        color: #FFD700 !important;
-        border: 2px solid #FFD700 !important;
-        border-radius: 10px !important;
-        width: 100%;
-        transition: 0.3s;
+        margin-bottom: 10px !important;
     }
     
-    .stButton>button:hover {
-        background-color: #FFD700 !important;
-        color: #1A1A1A !important;
-    }
-
-    /* 7. Barra de Progreso (Línea de Tiempo) */
-    .stProgress > div > div > div > div {
-        background-color: #8B0000 !important;
-    }
-
-    /* 8. Zona Premium Bloqueada */
-    .premium-lock {
-        background-color: #1A1A1A;
-        color: #FFD700;
-        padding: 30px;
-        border-radius: 20px;
-        border: 3px solid #8B0000;
-        text-align: center;
-        box-shadow: 0px 10px 20px rgba(0,0,0,0.3);
+    /* 4. Frases de Motivación JPL */
+    .motivation-box {
+        background: linear-gradient(90deg, #1A1A1A 0%, #444 100%);
+        color: #FFD700 !important;
+        padding: 12px;
+        border-radius: 8px;
+        border-left: 6px solid #8B0000;
+        font-style: italic;
     }
     </style>
     """, unsafe_allow_html=True)
