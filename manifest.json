@@ -1,15 +1,24 @@
 {
-  "name": "JPL Gestión SST",
+  "name": "JPL Prevencionistas",
   "short_name": "APP JPL",
+  "description": "Sistema de Gestión SST - JPL",
   "icons": [
     {
-      "src": "logo_jplfinal.jpg",
+      "src": "https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/",
+  "start_url": "https://jplprevencionistas.streamlit.app/",
   "display": "standalone",
   "background_color": "#D9D9D9",
-  "theme_color": "#8B0000"
+  "theme_color": "#8B0000",
+  "orientation": "portrait"
 }
