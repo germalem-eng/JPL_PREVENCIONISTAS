@@ -85,7 +85,7 @@ with st.sidebar:
 
 # --- 5. LÓGICA DE CONTENIDO ---
 if menu == "🏠 Inicio":
-    st.title("Bienvenido a APP JPL")
+    st.title("Bienvenido a APP JPL".)
     st.info("Utilice el menú lateral para navegar. Las funciones de descarga requieren acceso Premium.")
 
 elif menu == "💎 Contenido Premium":
