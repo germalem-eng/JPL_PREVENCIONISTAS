@@ -4,46 +4,27 @@ import os
 # --- 1. CONFIGURACIÓN E IDENTIDAD ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
-# --- 2. ESTILO CORPORATIVO (CONSOLIDADO FINAL) ---
+# --- 2. ESTILO CORPORATIVO (SOLUCIÓN DE VISIBILIDAD) ---
 st.markdown("""
     <style>
-    /* 1. Limpieza de interfaz para que parezca App */
-    [data-testid="stHeader"] { display: none !important; }
-    #MainMenu { visibility: hidden; }
-    footer { visibility: hidden; }
-    header { visibility: hidden; }
+    /* 1. Ocultar solo el encabezado y pie de página de Streamlit */
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    [data-testid="stHeader"] {display: none !important;}
 
-    /* 2. Ajuste de altura para móviles (sube el contenido) */
-    .block-container {
-        padding-top: 0rem !important;
-        margin-top: -30px !important;
+    /* 2. FORZAR QUE EL CONTENIDO SEA VISIBLE Y NO ESTÉ TAPADO */
+    .main .block-container {
+        padding-top: 2rem !important;
     }
 
-    /* 3. Ajuste del LOGO en la Sidebar (El toque profesional) */
-    [data-testid="stSidebar"] img {
-        margin-top: 30px !important;
-        margin-bottom: 20px !important;
-        border-radius: 15px;
-        border: 2px solid #1A1A1A;
-        padding: 5px;
-        background-color: white;
+    /* 3. Asegurar que el menú lateral (Sidebar) se vea */
+    [data-testid="stSidebar"] {
+        background-color: #f8f9fa;
+        visibility: visible !important;
     }
 
-    /* 4. Estilo de los Ítems (Expansiones) */
-    .stExpander {
-        border-radius: 12px !important;
-        border: 1px solid #1A1A1A !important;
-    }
-
-    /* 5. Frases de Motivación (Dorado y Negro) */
-    .caja-motivacion {
-        background: linear-gradient(90deg, #1A1A1A 0%, #444 100%);
-        color: #FFD700 !important;
-        padding: 12px;
-        border-radius: 8px;
-        border-left: 6px solid #8B0000;
-        font-style: italic;
-    }
+    /* 4. Intentar ocultar los botones flotantes de la derecha */
+    .stAppDeployButton {display: none !important;}
     </style>
     """, unsafe_allow_html=True)
 # --- 3. BASE DE DATOS (7, 21 Y 60 ÍTEMS CON FRASES DE MOTIVACIÓN) ---
