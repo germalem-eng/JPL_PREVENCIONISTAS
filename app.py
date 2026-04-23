@@ -9,9 +9,9 @@ st.markdown("""
     <style>
     /* 1. Limpieza de interfaz para que parezca App */
     [data-testid="stHeader"] { display: none !important; }
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    #MainMenu { visibility: hidden; }
+    footer { visibility: hidden; }
+    header { visibility: hidden; }
 
     /* 2. Ajuste de altura para móviles (sube el contenido) */
     .block-container {
@@ -21,22 +21,22 @@ st.markdown("""
 
     /* 3. Ajuste del LOGO en la Sidebar (El toque profesional) */
     [data-testid="stSidebar"] img {
-        margin-top: 30px !important; 
+        margin-top: 30px !important;
         margin-bottom: 20px !important;
-        border-radius: 15px; 
-        border: 2px solid #1A1A1A; 
+        border-radius: 15px;
+        border: 2px solid #1A1A1A;
         padding: 5px;
-        background-color: white; 
+        background-color: white;
     }
 
-    /* 4. Estilo de los Ítems (Expanders) */
-    .stExpander { 
-        border-radius: 12px !important; 
+    /* 4. Estilo de los Ítems (Expansiones) */
+    .stExpander {
+        border-radius: 12px !important;
         border: 1px solid #1A1A1A !important;
     }
 
     /* 5. Frases de Motivación (Dorado y Negro) */
-    .motivation-box {
+    .caja-motivacion {
         background: linear-gradient(90deg, #1A1A1A 0%, #444 100%);
         color: #FFD700 !important;
         padding: 12px;
@@ -46,7 +46,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
 # --- 3. BASE DE DATOS (7, 21 Y 60 ÍTEMS CON FRASES DE MOTIVACIÓN) ---
 DATA_SST = {
     "📊 1-10 Trabajadores (Pequeña)": [
