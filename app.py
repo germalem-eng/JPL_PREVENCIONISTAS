@@ -23,7 +23,7 @@ st.markdown("""
         visibility: visible !important;
     }
 
-    /* 4. Intentar ocultar los botones flotantes de la derecha */
+    /* 4. cultar los botones flotantes de la derecha */
     .stAppDeployButton {display: none !important;}
     </style>
     """, unsafe_allow_html=True)
@@ -48,19 +48,27 @@ DATA_SST = {
 
 # --- 4. BARRA LATERAL (LOGIN Y NAVEGACIÓN) ---
 with st.sidebar:
-    if os.path.exists("logo_jplfinal.jpg"):
-        st.image("logo_jplfinal.jpg", use_container_width=True)
-    st.markdown("<h2 style='text-align: center;'>APLICACIÓN JPL</h2>", unsafe_allow_html=True)
+    # Opción A: Usar link directo para asegurar que cargue en el celular siempre
+    logo_url = "https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg"
+    st.image(logo_url, use_container_width=True)
+    
+    # Título en Vinotinto
+    st.markdown("<h2 style='text-align: center; color: #8B0000;'>APLICACIÓN JPL</h2>", unsafe_allow_html=True)
     st.markdown("---")
     
     # LOGIN PARA DESCARGAS Y PREMIUM
-    st.markdown("### 🔑 Acceso Premium")
+    st.markdown("<h3 style='color: #8B0000;'>🔑 Acceso Premium</h3>", unsafe_allow_html=True)
     pass_user = st.text_input("Contraseña Cliente:", type="password")
     is_premium = (pass_user == "JPL2026")
     
     st.markdown("---")
+    
+    # Estilo para el Radio Button (Opciones)
+    st.markdown("<p style='color: #8B0000; font-weight: bold;'>Menú Principal:</p>", unsafe_allow_html=True)
     opciones = ["🏠 Inicio", "📊 1-10 Trabajadores (Pequeña)", "🏢 11-50 Trabajadores (Mediana)", "🏗️ +50 / Riesgo IV-V (Grande)", "💎 Contenido Premium"]
-    menu = st.radio("Menú Principal:", opciones)
+    menu = st.radio("", opciones) # Quitamos el label para usar el personalizado arriba
+    
+    st.markdown("---")
     st.caption("Soluciones MyM | L.I.N.A.")
 
 # --- 5. LÓGICA DE CONTENIDO ---
