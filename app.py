@@ -4,27 +4,33 @@ import os
 # --- 1. CONFIGURACIÓN E IDENTIDAD ---
 st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
 
-# --- 2. ESTILO CORPORATIVO (SOLUCIÓN DE VISIBILIDAD) ---
+# --- 2. ESTILO CORPORATIVO (CORRECCIÓN BOTÓN MÓVIL) ---
 st.markdown("""
     <style>
-    /* 1. Ocultar solo el encabezado y pie de página de Streamlit */
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-    [data-testid="stHeader"] {display: none !important;}
-
-    /* 2. FORZAR QUE EL CONTENIDO SEA VISIBLE Y NO ESTÉ TAPADO */
-    .main .block-container {
-        padding-top: 2rem !important;
-    }
-
-    /* 3. Asegurar que el menú lateral (Sidebar) se vea */
-    [data-testid="stSidebar"] {
-        background-color: #f8f9fa;
+    /* 1. Ocultar lo innecesario pero DEJAR el botón de menú */
+    header { visibility: hidden; }
+    footer { visibility: hidden; }
+    [data-testid="stHeader"] { 
+        background: transparent !important;
+        display: flex !important;
         visibility: visible !important;
     }
 
-    /* 4. cultar los botones flotantes de la derecha */
-    .stAppDeployButton {display: none !important;}
+    /* 2. FORZAR que el botón de las 3 rayitas sea visible y negro */
+    button[kind="headerNoPadding"] {
+        visibility: visible !important;
+        display: block !important;
+        color: black !important;
+        z-index: 999999 !important;
+    }
+
+    /* 3. Ajuste de contenido para que no se tape */
+    .main .block-container {
+        padding-top: 3rem !important;
+    }
+
+    /* 4. Quitar botón rojo de Deploy */
+    .stAppDeployButton { display: none !important; }
     </style>
     """, unsafe_allow_html=True)
 # --- 3. BASE DE DATOS (7, 21 Y 60 ÍTEMS CON FRASES DE MOTIVACIÓN) ---
