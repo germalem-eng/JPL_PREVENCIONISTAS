@@ -1,8 +1,10 @@
 import streamlit as st
 import os
 
-# --- 1. CONFIGURACIÓN E IDENTIDAD ---
-st.set_page_config(page_title="APP JPL - Gestión SST", layout="wide", page_icon="🛡️")
+st.markdown(
+    f'<link rel="manifest" href="https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/manifest.json">',
+    unsafe_allow_html=True
+)
 
 # --- 2. ESTILO CORPORATIVO (CORRECCIÓN BOTÓN MÓVIL) ---
 st.markdown("""
