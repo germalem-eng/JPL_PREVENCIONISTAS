@@ -151,4 +151,4 @@ with tab4:
             st.info("Enviando solicitud a JPL Prevencionistas...")
 
 st.divider()
-st.caption("Soluciones MyM - Innovación para el sector Corporativo | 2026")s
+st.caption("Soluciones MyM - Innovación para el sector Corporativo | 2026")
