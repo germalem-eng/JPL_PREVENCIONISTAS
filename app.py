@@ -2,115 +2,119 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# --- CONFIGURACIÓN E IDENTIDAD VISUAL ---
-st.set_page_config(page_title="JPL Prevencionistas - Gestión de Riesgos", layout="wide")
+# --- CONFIGURACIÓN E IDENTIDAD VISUAL (Fiel a Soluciones MyM) ---
+st.set_page_config(page_title="JPL Prevencionistas - Auditoría Élite", layout="wide")
 
-# Colores: Vinotinto (#800000), Dorado (#FFD700), Gris (#F0F2F6)
+# Estilos: Vinotinto Real (#800000), Gris Técnico (#F0F2F6), Blanco y Dorado (#FFD700)
 st.markdown("""
     <style>
+    .main { background-color: #FFFFFF; }
+    [data-testid="stHeader"] { background-color: #800000; }
     [data-testid="stSidebar"] { background-color: #800000; color: white; }
     .stTabs [data-baseweb="tab-list"] { background-color: #800000; }
     .stTabs [data-baseweb="tab"] { color: white; }
     
-    .stExpander { background-color: #F0F2F6 !important; border-radius: 10px; border: 1px solid #D1D1D1; }
-    
+    /* Recuadros de Auditoría en Gris */
+    .stExpander {
+        background-color: #F0F2F6 !important;
+        border: 1px solid #D1D1D1 !important;
+        border-radius: 10px !important;
+    }
+
+    /* Frase Motivacional en Dorado (Sello Natalia/Juan) */
     .frase-dorada {
         background-color: #1a1a1a;
-        padding: 15px;
+        padding: 18px;
         border-radius: 8px;
         border-left: 6px solid #FFD700;
+        margin-top: 10px;
         color: #FFD700;
         font-weight: bold;
         font-style: italic;
-        margin: 10px 0;
+        line-height: 1.5;
     }
     
-    .nota-legal {
-        background-color: #fff3cd;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ffeeba;
-        color: #856404;
-        font-size: 0.9em;
-        margin-bottom: 20px;
-    }
+    .texto-vinotinto { color: #800000; font-weight: bold; }
+    h1, h2, h3 { color: #800000; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- BASE DE DATOS ESTRUCTURADA (7, 21, 62 ÍTEMS ÍNTEGROS) ---
-# Se cargan los datos conforme a los estándares mínimos del SG-SST
+# --- ESTRUCTURA DE LAS 4 CATEGORÍAS (Desglose fiel para cobro diferenciado) ---
 DATOS = {
-    "Pequeña (7 Estándares)": [
-        {"id": "1", "titulo": "Asignación de responsable del SG-SST", "items": ["Acta de designación", "Licencia SST", "Curso 50h"], "frase": "📌 Una persona competente garantiza que el sistema funcione y prevenga riesgos reales."},
-        {"id": "2", "titulo": "Afiliación al Sistema de Seguridad Social", "items": ["Planillas PILA", "Certificados ARL/EPS", "Control Contratistas"], "frase": "📌 La afiliación adecuada protege al trabajador y evita sanciones económicas."},
-        {"id": "3", "titulo": "Capacitación en SST", "items": ["Cronograma Anual", "Listas de asistencia", "Evaluaciones"], "frase": "📌 Capacitar es prevenir errores humanos y fortalecer la cultura de seguridad."},
-        {"id": "4", "titulo": "Plan Anual de Trabajo", "items": ["Objetivos medibles", "Cronograma de ejecución", "Recursos firmados"], "frase": "📌 Un plan bien estructurado es la hoja de ruta hacia una empresa segura."},
-        {"id": "5", "titulo": "Evaluaciones Médicas Ocupacionales", "items": ["Conceptos de aptitud", "Custodia de historias", "Seguimiento médico"], "frase": "📌 Cuidar la salud es proteger el activo más importante de la compañía."},
-        {"id": "6", "titulo": "Identificación de Peligros y Riesgos", "items": ["Matriz GTC 45", "Evidencia de inspección", "Controles aplicados"], "frase": "📌 Identificar peligros a tiempo evita que un incidente sea una tragedia."},
-        {"id": "7", "titulo": "Medidas de Prevención y Control", "items": ["Mantenimiento equipos", "Entrega EPP", "Señalización"], "frase": "📌 La prevención es una inversión en productividad y bienestar."}
-    ],
-    "Mediana (21 Estándares)": [
-        {"id": str(i+1), "titulo": t, "items": ["Soporte de cumplimiento", "Evidencia física"], "frase": "📌 La gestión técnica es el escudo ante auditorías legales."}
-        for i, t in enumerate(["Responsable SST", "Recursos", "Seguridad Social", "COPASST", "COCOLA", "Capacitación", "Política SST", "Plan Trabajo", "Archivo", "Matriz Legal", "Evaluación Inicial", "Plan Mejora", "Médicos", "Reporte AT/EL", "Investigaciones", "Peligros", "Mantenimiento", "EPP", "Emergencias", "Brigadas", "Revisión Gerencial"])
-    ],
-    "Grande (62 Estándares)": [
-        {"id": str(i+1), "titulo": t, "items": ["Validación Técnica", "Soporte ARL"], "frase": "📌 La excelencia en los 62 estándares es el nivel más alto de cumplimiento."}
-        for i, t in enumerate(["RRHH", "Financieros", "Responsabilidades", "Pago SS", "COPASST", "Capacitación COPASST", "COCOLA", "Capacitación COCOLA", "Inducción", "Curso 50h", "Política", "Objetivos", "Evaluación Inicial", "Plan Trabajo", "Rendición Cuentas", "Matriz Legal", "Comunicación", "Proveedores", "Gestión Cambio", "Sociodemográfica", "Médicos", "Seguimiento Médico", "Historias Clínicas", "Estilos Vida", "Carcinógenos", "Peligros", "Mediciones", "Controles", "Inspecciones", "Mantenimiento", "EPP", "Emergencias", "Brigada", "Indicadores", "Auditoría", "Revisión", "Correctivas", "Mejora", "Otros 22 ítems legales"])
-    ]
+    "Micropyme (Nivel I: < 10 Emp)": {
+        "items": [f"Estándar {i+1}" for i in range(7)],
+        "desc": "Cumplimiento básico legal - Estándares Mínimos.",
+        "frase": "📌 El cimiento de una gran empresa es la seguridad de su pequeño equipo."
+    },
+    "Mipyme (Nivel II: 11 - 50 Emp)": {
+        "items": [f"Estándar {i+1}" for i in range(21)],
+        "desc": "Gestión táctica de riesgos y salud ocupacional.",
+        "frase": "📌 La prevención es la mejor herramienta de productividad para su equipo."
+    },
+    "Corporación Nivel I (51 - 200 Emp)": {
+        "items": [f"Estándar {i+1}" for i in range(62)],
+        "desc": "Gestión Integral - 62 Estándares (Escala Media).",
+        "frase": "📌 La excelencia en la gestión protege su capital humano y su patrimonio legal."
+    },
+    "Corporación Nivel II (> 200 Emp)": {
+        "items": [f"Estándar {i+1}" for i in range(62)],
+        "desc": "Auditoría de Alta Complejidad y Riesgo (Gran Escala).",
+        "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad corporativa."
+    }
 }
 
-# --- SIDEBAR Y ACCESO ---
+# --- SIDEBAR ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
-    st.title("🛡️ Acceso JPL")
-    correo = st.text_input("Usuario")
+    st.title("🛡️ Gestión Especializada")
     st.divider()
-    cat_sel = st.selectbox("Categoría de Empresa", list(DATOS.keys()))
+    cat_seleccionada = st.selectbox("Clasificación de Riesgo Económico", list(DATOS.keys()))
+    st.write(f"**Enfoque:** {DATOS[cat_seleccionada]['desc']}")
 
-# --- INTERFAZ PRINCIPAL ---
-st.title("Sistema de Gestión de SST")
-st.markdown('<div class="nota-legal"><b>NOTA IMPORTANTE:</b> Revise cada ítem de acuerdo con el SG-SST de su empresa. Identifique si el ítem <b>APLICA o NO APLICA</b> para desarrollar solo los que correspondan legalmente.</div>', unsafe_allow_html=True)
+# --- CUERPO DE LA APP ---
+st.title(f"Auditoría: {cat_seleccionada}")
+st.info("NOTA: Identifique si cada ítem APLICA o NO APLICA según el SG-SST específico de la empresa.")
 
-tab1, tab2, tab3 = st.tabs(["📋 Auditoría y Aplicabilidad", "📊 Resultado Real", "🎥 Multimedia"])
+tab1, tab2, tab3 = st.tabs(["📋 Lista de Chequeo y Evidencias", "📊 Análisis de Desempeño", "🎥 Biblioteca de Soporte"])
 
-cumplidos, aplicables_totales = 0, 0
+cumplidos, aplicables = 0, 0
 
 with tab1:
-    for item in DATOS[cat_sel]:
-        with st.expander(f"🔹 Estándar {item['id']}: {item['titulo']}"):
-            # Selector de Aplicabilidad por Estándar
-            aplica_estandar = st.radio(f"¿Este estándar aplica a su empresa?", ["Aplica", "No Aplica"], key=f"aplica_{cat_sel}_{item['id']}", horizontal=True)
+    for idx, item in enumerate(DATOS[cat_seleccionada]['items']):
+        with st.expander(f"🔹 {item}"):
+            # Lógica de Aplicabilidad: Vital para el valor agregado de Juan y Natalia
+            aplica = st.radio("¿Aplica este requerimiento?", ["Sí", "No"], key=f"ap_{cat_seleccionada}_{idx}", horizontal=True)
             
-            if aplica_estandar == "Aplica":
-                st.markdown(f'<div class="frase-dorada">{item["frase"]}</div>', unsafe_allow_html=True)
-                for sub in item['items']:
-                    aplicables_totales += 1
-                    col1, col2 = st.columns([1, 2])
-                    with col1:
-                        sel = st.radio(f"¿Cumple con {sub}?", ["No", "Sí"], key=f"r_{cat_sel}_{item['id']}_{sub}")
-                    with col2:
-                        if sel == "Sí":
-                            st.file_uploader(f"Adjuntar soporte: {sub}", key=f"f_{cat_sel}_{item['id']}_{sub}")
-                            cumplidos += 1
-                        else:
-                            st.error("🚨 ALERTA: Documento pendiente de gestión.")
+            if aplica == "Sí":
+                st.markdown(f'<div class="frase-dorada">{DATOS[cat_seleccionada]["frase"]}</div>', unsafe_allow_html=True)
+                aplicables += 1
+                
+                col1, col2 = st.columns([1, 2])
+                with col1:
+                    estado = st.radio("Estado:", ["Pendiente", "Cumple"], key=f"st_{idx}")
+                with col2:
+                    if estado == "Cumple":
+                        st.file_uploader("Cargar Soporte Documental Obligatorio", key=f"up_{idx}")
+                        cumplidos += 1
+                    else:
+                        st.error("🚨 ALERTA: Requiere gestión para evitar multas de Ley 1562.")
             else:
-                st.info("ℹ️ Ítem marcado como 'No Aplica'. No será contabilizado en el porcentaje de riesgo.")
+                st.info("ℹ️ Ítem no aplicable para esta estructura.")
 
 with tab2:
-    st.header("Porcentaje de Implementación Real")
-    if aplicables_totales > 0:
-        progreso = (cumplidos / aplicables_totales * 100)
-        fig = px.pie(values=[progreso, 100 - progreso], names=["Cumplido", "Pendiente"],
+    st.header("Resultado de la Auditoría Real")
+    if aplicables > 0:
+        progreso = (cumplidos / aplicables * 100)
+        fig = px.pie(values=[progreso, 100-progreso], names=["Cumplido", "En Riesgo"],
                      color_discrete_sequence=['#800000', '#D1D1D1'], hole=.5)
         st.plotly_chart(fig)
-        st.metric("Nivel de Cumplimiento sobre ítems APLICABLES", f"{int(progreso)}%")
+        st.metric("Nivel de Implementación", f"{int(progreso)}%")
     else:
-        st.write("Seleccione ítems aplicables para ver la estadística.")
+        st.warning("Debe marcar ítems como 'Aplica' para ver el análisis.")
 
 with tab3:
-    st.header("Capacitación Premium")
+    st.header("Soporte Multimedia JPL")
     st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 st.divider()
-st.caption("Desarrollado por Soluciones MyM - Proyecto L.I.N.A 2026")
+st.caption("© 2026 Soluciones MyM - Innovación para JPL Prevencionistas SAS")
