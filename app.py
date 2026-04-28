@@ -33,13 +33,21 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- BASE DE DATOS DE MULTAS (LEY 1562) ---
-MULTAS = {
-    "Micropyme (<10 Emp)": "Hasta 24 SMMMLV",
-    "Mipyme (11-50 Emp)": "Hasta 150 SMMMLV",
-    "Corporación I (51-200 Emp)": "Hasta 400 SMMMLV",
-    "Corporación II (>200 Emp)": "Hasta 1000 SMMMLV"
+# --- BASE DE DATOS DE MULTAS Y ESTÁNDARES ---
+INFO_LEGAL = {
+    "Micropyme (<10 Emp)": {"multa": "24 SMMMLV", "n_items": 7, "prefix": "Estándar Mínimo"},
+    "Mipyme (11-50 Emp)": {"multa": "150 SMMMLV", "n_items": 21, "prefix": "Estándar Técnico"},
+    "Corporación I (51-200 Emp)": {"multa": "400 SMMMLV", "n_items": 62, "prefix": "Gestión Corporativa"},
+    "Corporación II (>200 Emp)": {"multa": "1000 SMMMLV", "n_items": 62, "prefix": "Alta Complejidad"}
 }
+
+# Frases motivacionales que rotarán
+FRASES = [
+    "📌 La seguridad es el cimiento de la productividad corporativa.",
+    "📌 Un entorno seguro es un entorno eficiente y rentable.",
+    "📌 La prevención hoy evita la crisis de mañana.",
+    "📌 El cumplimiento legal es la mejor inversión para su patrimonio."
+]
 
 # --- SISTEMA DE SESIÓN ---
 if "autenticado" not in st.session_state:
@@ -47,97 +55,100 @@ if "autenticado" not in st.session_state:
 if "es_premium" not in st.session_state:
     st.session_state.es_premium = False
 
-# --- LOGIN ---
+# --- ACCESO ---
 if not st.session_state.autenticado:
     with st.sidebar:
         st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
         st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
         token = st.text_input("Clave Dinámica (Premium)", type="password")
-        if st.button("Acceso Premium"):
+        if st.button("Validar Acceso Premium"):
             if token == "2026JPL":
                 st.session_state.autenticado = True
                 st.session_state.es_premium = True
                 st.rerun()
-        if st.button("Acceso Invitado"):
+        if st.button("Continuar como Invitado"):
             st.session_state.autenticado = True
             st.session_state.es_premium = False
             st.rerun()
-    st.warning("🔒 Por favor, seleccione un modo de acceso en el panel lateral.")
     st.stop()
 
-# --- SIDEBAR POST-LOGIN ---
+# --- PANEL LATERAL ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
     st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
     
-    categoria = st.selectbox("Categoría de Auditoría", list(MULTAS.keys()))
+    categoria = st.selectbox("Clasificación de Empresa", list(INFO_LEGAL.keys()))
     st.divider()
     
-    user_label = "JPL PREVENCIONISTAS S.A.S (Admin)" if st.session_state.es_premium else "MODO INVITADO (Demo)"
+    user_label = "JPL PREVENCIONISTAS S.A.S (Admin)" if st.session_state.es_premium else "ACCESO DEMOSTRATIVO"
     st.markdown(f'<div class="usuario-box">Usuario: {user_label}</div>', unsafe_allow_html=True)
     
     if st.button("Cerrar Sesión"):
         st.session_state.autenticado = False
         st.rerun()
 
-# --- CONTENIDO PRINCIPAL ---
-st.title(f"Sistema de Auditoría - {categoria}")
+# --- CONTENIDO ---
+st.title(f"Módulo de Auditoría - {categoria}")
+st.write(f"Criterio: {INFO_LEGAL[categoria]['n_items']} estándares aplicables.")
 
-tab1, tab2, tab3, tab4 = st.tabs(["📋 Estándares", "📊 Gráficas", "📈 Línea de Tiempo", "💎 Zona Premium"])
+tab1, tab2, tab3, tab4 = st.tabs(["📋 Auditoría de Ítems", "📊 Dashboard", "📅 Cronograma", "🎥 Videoteca Premium"])
 
-# Simulación de datos para que el invitado vea movimiento
-cumplidos, totales = 4, 7
+# Contador dinámico para gráficas
+cumplidos = 0
+total_activos = INFO_LEGAL[categoria]['n_items']
 
 with tab1:
-    st.info("Identifique si el ítem aplica. El modo Invitado no permite cargar archivos.")
-    with st.expander("🔹 Estándar 1: Asignación de Responsable"):
-        st.markdown('<div class="frase-dorada">📌 La seguridad es el cimiento de la productividad corporativa.</div>', unsafe_allow_html=True)
-        aplica = st.radio("¿Aplica?", ["Sí", "No"], key="it1")
-        if aplica == "Sí":
-            if st.session_state.es_premium:
-                st.file_uploader("Subir Evidencia Legal")
-            else:
-                st.warning("🔒 Carga de archivos bloqueada para invitados.")
+    st.info("Revise la aplicabilidad de cada estándar. La carga de evidencias requiere cuenta activa.")
+    for i in range(1, total_activos + 1):
+        with st.expander(f"🔹 {INFO_LEGAL[categoria]['prefix']} {i}"):
+            st.markdown(f'<div class="frase-dorada">{FRASES[i % len(FRASES)]}</div>', unsafe_allow_html=True)
+            aplica = st.radio("¿Aplica?", ["Sí", "No"], key=f"check_{categoria}_{i}", horizontal=True)
+            if aplica == "Sí":
+                if st.session_state.es_premium:
+                    st.file_uploader(f"Cargar soporte estándar {i}")
+                    if st.checkbox("Marcar como cumplido", key=f"cumple_{i}"):
+                        cumplidos += 1
+                else:
+                    st.warning("🔒 El modo invitado permite visualizar pero no gestionar evidencias.")
 
 with tab2:
-    st.header("Análisis de Riesgo Actual")
-    fig = px.pie(values=[cumplidos, totales-cumplidos], names=["Cumplido", "En Riesgo"], 
-                 color_discrete_sequence=['#800000', '#D3D3D3'], hole=.5)
-    st.plotly_chart(fig, use_container_width=True)
+    st.header("Análisis de Riesgo y Cumplimiento")
+    col_g1, col_g2 = st.columns(2)
     
-    # MOSTRAR MULTAS (El gancho comercial)
-    st.markdown(f"""
-        <div class="alerta-multa">
-            ⚠️ RIESGO ECONÓMICO DETECTADO:<br>
-            Según Ley 1562, por su categoría, las multas pueden ascender hasta: {MULTAS[categoria]}
-        </div>
-    """, unsafe_allow_html=True)
+    with col_g1:
+        # Gráfica de cumplimiento
+        fig = px.pie(values=[cumplidos, total_activos-cumplidos], names=["Cumplido", "Pendiente"], 
+                     color_discrete_sequence=['#800000', '#D3D3D3'], hole=.5)
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col_g2:
+        st.markdown(f"""
+            <div class="alerta-multa">
+                ⚠️ RIESGO ECONÓMICO CALCULADO:<br><br>
+                Bajo la Ley 1562, el incumplimiento en su categoría conlleva multas de hasta:<br>
+                <span style="font-size: 1.2em;">{INFO_LEGAL[categoria]['multa']}</span>
+            </div>
+        """, unsafe_allow_html=True)
 
 with tab3:
-    st.header("Línea de Tiempo de Implementación")
-    df_timeline = pd.DataFrame([
-        dict(Tarea="Fase 1: Diagnóstico", Inicio='2026-04-01', Fin='2026-04-10'),
-        dict(Tarea="Fase 2: Documentación", Inicio='2026-04-11', Fin='2026-05-15')
+    st.header("Línea de Tiempo de Ejecución")
+    df = pd.DataFrame([
+        dict(Tarea="Fase de Diagnóstico", Inicio='2026-04-01', Fin='2026-04-15'),
+        dict(Tarea="Fase de Implementación", Inicio='2026-04-16', Fin='2026-06-30')
     ])
-    fig_time = px.timeline(df_timeline, x_start="Inicio", x_end="Fin", y="Tarea", color_discrete_sequence=['#800000'])
-    st.plotly_chart(fig_time, use_container_width=True)
+    fig_line = px.timeline(df, x_start="Inicio", x_end="Fin", y="Tarea", color_discrete_sequence=['#800000'])
+    st.plotly_chart(fig_line, use_container_width=True)
 
 with tab4:
     if st.session_state.es_premium:
-        st.success("Acceso total habilitado.")
-        st.button("Descargar Reporte PDF")
-        st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        st.success("Acceso total a la videoteca y descarga de reportes habilitado.")
+        st.button("Descargar Reporte Final (PDF)")
+        st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Video de ejemplo
     else:
-        st.error("🛑 ACCESO RESTRINGIDO")
-        st.markdown("""
-            **El modo Premium incluye:**
-            * Descarga de Reportes Ejecutivos para ARL.
-            * Carga ilimitada de evidencias en la nube.
-            * Acceso a la videoteca de capacitación de Natalia y Juan.
-            * Soporte técnico prioritario por Soluciones MyM.
-        """)
-        if st.button("Solicitar Código Premium"):
-            st.info("Contacte a JPL Prevencionistas para adquirir su suscripción.")
+        st.error("🛑 Acceso Restringido")
+        st.write("Para descargar su informe de auditoría y acceder a los videos de capacitación, debe activar su licencia Premium.")
+        if st.button("Contactar Asesor"):
+            st.info("Enviando solicitud a JPL Prevencionistas...")
 
 st.divider()
-st.caption("Soluciones MyM - Innovación para JPL Prevencionistas SAS | 2026")
+st.caption("Soluciones MyM - Innovación para el sector Corporativo | 2026")s
