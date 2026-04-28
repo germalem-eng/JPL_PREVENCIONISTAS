@@ -38,7 +38,7 @@ st.markdown("""
 # --- BASE DE DATOS REAL (Extracto de tus Documentos) ---
 DATOS = {
     "Pequeña (1-10)": [
-        {"id": "1", "titulo": "Asignación de persona que diseña el SG-SST", "subs": ["Acta de designación", "Hoja de vida", "Licencia SST", "Curso 50h"], "f": "📌 Contar con una persona competente no es solo un requisito, es quien garantiza que el SG-SST funcione correctamente y prevenga riesgos que pueden afectar a toda la empresa.", "p": "Semestral"},
+        {"id": "1", "titulo": "Asignación de persona que diseña el SG-SST", "subs": ["Acta de designación", "Hoja de vida", "Licencia SST", "Curso 50h"], "f": " Contar con una persona competente no es solo un requisito, es quien garantiza que el SG-SST funcione correctamente y prevenga riesgos que pueden afectar a toda la empresa.", "p": "Semestral"},
         {"id": "2", "titulo": "Afiliación Seguridad Social", "subs": ["Planillas mes a mes", "Verificación moras", "Control contratistas"], "f": "Protección legal y económica.", "p": "Cuatrimestral"},
         {"id": "3", "titulo": "Capacitación en SST", "subs": ["Programa/Cronograma", "Inducciones", "Evidencias"], "f": "Previene errores humanos.", "p": "Bimestral"},
         {"id": "4", "titulo": "Plan Anual de Trabajo", "subs": ["Objetivos/Metas", "Cronograma", "Recursos firmados"], "f": "Planear es anticiparse.", "p": "Anual"},
