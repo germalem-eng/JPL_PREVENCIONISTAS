@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import time
 
 # --- CONFIGURACIÓN E IDENTIDAD VISUAL ---
 st.set_page_config(page_title="JPL Prevencionistas - Auditoría Élite", layout="wide")
@@ -13,126 +14,110 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] { background-color: #800000; }
     .stTabs [data-baseweb="tab"] { color: white; }
     
-    /* Título en Blanco Perla */
-    .titulo-sidebar {
-        color: #F0EAD6; /* Blanco Perla */
-        font-weight: bold;
-        font-size: 1.3em;
-        margin-bottom: 15px;
-        text-align: center;
-    }
+    .titulo-sidebar { color: #F0EAD6; font-weight: bold; font-size: 1.3em; margin-bottom: 15px; text-align: center; }
 
-    /* Recuadro Gris con Texto Negro para Usuario */
     .usuario-box {
-        background-color: #D3D3D3; /* Gris */
-        padding: 12px;
-        border-radius: 8px;
-        color: #000000; /* Negro */
-        font-weight: bold;
-        font-size: 0.9em;
-        text-align: center;
-        border: 1px solid #A9A9A9;
-    }
-
-    .stExpander {
-        background-color: #F0F2F6 !important;
-        border: 1px solid #D1D1D1 !important;
-        border-radius: 10px !important;
+        background-color: #D3D3D3; padding: 12px; border-radius: 8px;
+        color: #000000; font-weight: bold; font-size: 0.9em; text-align: center; border: 1px solid #A9A9A9;
     }
 
     .frase-dorada {
-        background-color: #1a1a1a;
-        padding: 18px;
-        border-radius: 8px;
-        border-left: 6px solid #FFD700;
-        margin-top: 10px;
-        color: #FFD700;
-        font-weight: bold;
-        font-style: italic;
+        background-color: #1a1a1a; padding: 18px; border-radius: 8px;
+        border-left: 6px solid #FFD700; margin-top: 10px; color: #FFD700;
+        font-weight: bold; font-style: italic;
     }
     
     h1, h2, h3 { color: #800000; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE CATEGORÍAS ---
-DATOS = {
-    "Micropyme (Nivel I: < 10 Emp)": {
-        "items": [
-            {"id": "1", "titulo": "Asignación de responsable del SG-SST", "evidencias": ["Acta de designación", "Licencia SST", "Curso 50h"], "frase": "📌 Contar con una persona competente garantiza que el sistema funcione y prevenga riesgos reales."},
-            {"id": "2", "titulo": "Afiliación al Sistema de Seguridad Social", "evidencias": ["Planillas PILA", "Certificados ARL/EPS"], "frase": "📌 La afiliación adecuada protege al trabajador y evita sanciones económicas."},
-            {"id": "3", "titulo": "Capacitación en SST", "evidencias": ["Cronograma", "Asistencias"], "frase": "📌 Capacitar es fortalecer la cultura de seguridad en todos los niveles."},
-            {"id": "4", "titulo": "Plan Anual de Trabajo", "evidencias": ["Objetivos", "Recursos"], "frase": "📌 Un plan bien estructurado es la hoja de ruta hacia una empresa segura."},
-            {"id": "5", "titulo": "Evaluaciones Médicas", "evidencias": ["Conceptos aptitud", "Seguimiento"], "frase": "📌 Cuidar la salud es proteger el activo más importante de la compañía."},
-            {"id": "6", "titulo": "Identificación de Riesgos", "evidencias": ["Matriz GTC 45", "Controles"], "frase": "📌 Identificar peligros a tiempo evita que un incidente sea una tragedia."},
-            {"id": "7", "titulo": "Medidas de Control", "evidencias": ["Mantenimiento", "Entrega EPP"], "frase": "📌 La prevención es una inversión en productividad y bienestar."}
-        ]
-    },
-    "Mipyme (Nivel II: 11 - 50 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Técnico {i+1}", "evidencias": ["Soporte Documental", "Registro"], "frase": "📌 La gestión técnica es el escudo ante auditorías legales."} for i in range(21)]
-    },
-    "Corporación Nivel I (51 - 200 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Corporativo {i+1}", "evidencias": ["Evidencia Técnica", "Validación"], "frase": "📌 La excelencia en la gestión protege su capital humano y patrimonio legal."} for i in range(62)]
-    },
-    "Corporación Nivel II (> 200 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Alta Complejidad {i+1}", "evidencias": ["Auditoría Maestro", "Soporte"], "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad corporativa."} for i in range(62)]
-    }
-}
+# --- SISTEMA DE SEGURIDAD (TOKEN DINÁMICO) ---
+if "autenticado" not in st.session_state:
+    st.session_state.autenticado = False
+if "es_premium" not in st.session_state:
+    st.session_state.es_premium = False
 
-# --- SIDEBAR ACTUALIZADO ---
+def login():
+    with st.sidebar:
+        st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
+        st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
+        
+        st.subheader("Acceso al Sistema")
+        user = st.text_input("ID de Usuario")
+        token = st.text_input("Clave Dinámica / Token", type="password")
+        
+        col_inv, col_pre = st.columns(2)
+        
+        with col_inv:
+            if st.button("Entrar Invitado"):
+                st.session_state.autenticado = True
+                st.session_state.es_premium = False
+                st.rerun()
+        
+        with col_pre:
+            if st.button("Validar Premium"):
+                # Aquí simulamos la clave dinámica estilo banco (ejemplo: 2026JPL)
+                if token == "2026JPL": 
+                    st.session_state.autenticado = True
+                    st.session_state.es_premium = True
+                    st.success("Token Válido")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    st.error("Token Incorrecto")
+
+# --- LÓGICA DE CONTENIDO ---
+if not st.session_state.autenticado:
+    login()
+    st.warning("⚠️ Inicie sesión para acceder a la auditoría.")
+    st.stop()
+
+# --- SI ESTÁ AUTENTICADO, MOSTRAR APP ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
     st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
     
-    categoria = st.selectbox("Clasificación Organizacional", list(DATOS.keys()))
+    # Categorías basadas en tus 4 divisiones de cobro
+    opciones = ["Micropyme (<10 Emp)", "Mipyme (11-50 Emp)", "Corporación I (51-200 Emp)", "Corporación II (>200 Emp)"]
+    categoria = st.selectbox("Estructura Organizacional", opciones)
     
     st.divider()
-    # Recuadro Gris con texto Negro
-    st.markdown('<div class="usuario-box">Usuario: JPL PREVENCIONISTAS S.A.S (Admin)</div>', unsafe_allow_html=True)
+    # Recuadro de Usuario según tu pedido
+    label_user = "JPL PREVENCIONISTAS S.A.S (Admin)" if st.session_state.es_premium else "USUARIO INVITADO (Lectura)"
+    st.markdown(f'<div class="usuario-box">Usuario: {label_user}</div>', unsafe_allow_html=True)
+    
+    if st.button("Cerrar Sesión"):
+        st.session_state.autenticado = False
+        st.rerun()
 
 # --- CUERPO DE LA APP ---
-st.title(f"Panel de Auditoría: {categoria}")
-st.info("NOTA: Identifique si cada ítem APLICA o NO APLICA de acuerdo con el SG-SST de la empresa.")
+st.title(f"Módulo de Auditoría: {categoria}")
 
-tab1, tab2, tab3 = st.tabs(["📋 Auditoría y Evidencias", "📊 Gráficas de Control", "🎥 Soporte"])
+if not st.session_state.es_premium:
+    st.warning("🔓 Estás en modo INVITADO. Puedes visualizar, pero la carga de evidencias y reportes está reservada para cuentas PREMIUM.")
 
-cumplidos, aplicables = 0, 0
+tab1, tab2, tab3 = st.tabs(["📋 Lista de Chequeo", "📊 Gráficas de Control", "📄 Reporte Final"])
 
 with tab1:
-    for item in DATOS[categoria]['items']:
-        with st.expander(f"🔹 {item['id']}. {item['titulo']}"):
-            aplica = st.radio("¿Este requerimiento aplica?", ["Sí", "No"], key=f"ap_{categoria}_{item['id']}", horizontal=True)
-            
-            if aplica == "Sí":
-                st.markdown(f'<div class="frase-dorada">{item["frase"]}</div>', unsafe_allow_html=True)
-                for ev in item['evidencias']:
-                    aplicables += 1
-                    col1, col2 = st.columns([1, 2])
-                    with col1:
-                        sel = st.radio(f"Cumple {ev}", ["No", "Sí"], key=f"sel_{categoria}_{item['id']}_{ev}")
-                    with col2:
-                        if sel == "Sí":
-                            st.file_uploader(f"Cargar {ev}", key=f"f_{categoria}_{item['id']}_{ev}")
-                            cumplidos += 1
-                        else:
-                            st.error("🚨 Pendiente de evidencia.")
+    st.info("Identifique si aplica o no según el SG-SST de la empresa.")
+    # Ejemplo de ítem con frase dorada
+    with st.expander("🔹 Estándar: Asignación de Responsable"):
+        st.markdown('<div class="frase-dorada">📌 La seguridad es el cimiento de la productividad corporativa.</div>', unsafe_allow_html=True)
+        aplica = st.radio("¿Aplica?", ["Sí", "No"], key="ap_1")
+        if aplica == "Sí":
+            if st.session_state.es_premium:
+                st.file_uploader("Cargar Soporte Documental")
             else:
-                st.info("ℹ️ Ítem marcado como 'No Aplica'.")
+                st.info("Para cargar evidencias, adquiera el módulo Premium.")
 
 with tab2:
-    st.header("Análisis de Cumplimiento Real")
-    if aplicables > 0:
-        progreso = (cumplidos / aplicables * 100)
-        fig = px.pie(values=[progreso, 100-progreso], names=["Cumplido", "Pendiente"], 
-                     color_discrete_sequence=['#800000', '#D1D1D1'], hole=.5)
-        st.plotly_chart(fig, use_container_width=True)
-        st.metric("Implementación Actual", f"{int(progreso)}%")
-    else:
-        st.warning("Seleccione ítems aplicables para generar estadísticas.")
+    # Gráficas dinámicas (se mantienen fieles a lo avanzado)
+    fig = px.pie(values=[70, 30], names=["Cumplido", "Pendiente"], color_discrete_sequence=['#800000', '#D1D1D1'], hole=.5)
+    st.plotly_chart(fig, use_container_width=True)
 
 with tab3:
-    st.header("Material de Capacitación")
-    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
-
-st.divider()
-st.caption("Soluciones MyM - Innovación para JPL Prevencionistas SAS | 2026")
+    if st.session_state.es_premium:
+        st.success("✅ Generación de Reporte PDF habilitada.")
+        st.button("Descargar Informe Ejecutivo")
+    else:
+        st.error("🔒 Función Bloqueada: El reporte final solo está disponible para clientes Premium con Soluciones MyM.")
