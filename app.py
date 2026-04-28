@@ -13,15 +13,15 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] { background-color: #800000; }
     .stTabs [data-baseweb="tab"] { color: white; }
     
-    /* Título de la App en Gris Ratón */
+    /* Título de la App en Blanco perla */
     .titulo-sidebar {
-        color: #4F4F4F; /* Gris Ratón */
+        color: #4F4F4F; /* Blanco perla */
         font-weight: bold;
         font-size: 1.2em;
         margin-bottom: 10px;
     }
 
-    /* Cuadro de Usuario con texto en Azul */
+    /* Cuadro de Usuario con texto en Gris Ratón */
     .usuario-box {
         background-color: rgba(255, 255, 255, 0.1);
         padding: 15px;
