@@ -132,4 +132,16 @@ with c1:
     if st.session_state.usuario == "premium":
         st.button("📥 Descargar Informe PDF")
     else:
-        st.button("🔒 Reporte Bloqueado",
+        st.button("🔒 Reporte Bloqueado", disabled=True)
+        st.caption("Solo para clientes con suscripción activa.")
+
+with c2:
+    st.subheader("Contenido Multimedia")
+    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") 
+    if st.session_state.usuario == "premium":
+        st.button("📥 Descargar Material de Capacitación")
+    else:
+        st.warning("Suscríbete para descargar videos originales.")
+
+st.markdown("---")
+st.caption("Soluciones MyM - Innovación para JPL Prevencionistas")
