@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# --- CONFIGURACIÓN E IDENTIDAD VISUAL (Vinotinto, Gris, Blanco) ---
+# --- CONFIGURACIÓN E IDENTIDAD VISUAL ---
 st.set_page_config(page_title="JPL Prevencionistas - Auditoría Élite", layout="wide")
 
 st.markdown("""
@@ -13,14 +13,30 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] { background-color: #800000; }
     .stTabs [data-baseweb="tab"] { color: white; }
     
-    /* Contenedores de Auditoría en Gris */
+    /* Título de la App en Gris Ratón */
+    .titulo-sidebar {
+        color: #4F4F4F; /* Gris Ratón */
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    /* Cuadro de Usuario con texto en Azul */
+    .usuario-box {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        color: #00BFFF; /* Azul brillante para resaltar */
+        font-weight: bold;
+        border: 1px solid #00BFFF;
+    }
+
     .stExpander {
         background-color: #F0F2F6 !important;
         border: 1px solid #D1D1D1 !important;
         border-radius: 10px !important;
     }
 
-    /* Frase Motivacional en Dorado (Sin resumir) */
     .frase-dorada {
         background-color: #1a1a1a;
         padding: 18px;
@@ -30,16 +46,13 @@ st.markdown("""
         color: #FFD700;
         font-weight: bold;
         font-style: italic;
-        line-height: 1.5;
     }
     
     h1, h2, h3 { color: #800000; }
-    .stButton>button { background-color: #800000; color: white; border-radius: 5px; width: 100%; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE LAS 4 CATEGORÍAS (Desglose fiel para monetización) ---
-# Aquí se cargan los ítems reales del SG-SST
+# --- ESTRUCTURA DE CATEGORÍAS (Basada en la tabla legal de multas subida) ---
 DATOS = {
     "Micropyme (Nivel I: < 10 Emp)": {
         "items": [
@@ -59,21 +72,24 @@ DATOS = {
         "items": [{"id": str(i+1), "titulo": f"Estándar Corporativo {i+1}", "evidencias": ["Evidencia Técnica", "Validación ARL"], "frase": "📌 La excelencia en la gestión protege su capital humano y patrimonio legal."} for i in range(62)]
     },
     "Corporación Nivel II (> 200 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Alta Complejidad {i+1}", "evidencias": ["Auditoría Externa", "Soporte Maestro"], "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad."} for i in range(62)]
+        "items": [{"id": str(i+1), "titulo": f"Estándar Alta Complejidad {i+1}", "evidencias": ["Auditoría Externa", "Soporte Maestro"], "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad corporativa."} for i in range(62)]
     }
 }
 
-# --- SIDEBAR ---
+# --- SIDEBAR ACTUALIZADO ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
-    st.title("🛡️ Gestión Especializada")
+    st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS</div>', unsafe_allow_html=True)
+    
     categoria = st.selectbox("Clasificación Organizacional", list(DATOS.keys()))
+    
     st.divider()
-    st.info("Usuario: Gerardo Martinez (Admin)")
+    # Cuadro de usuario con texto blanco
+    st.markdown('<div class="usuario-box">Usuario: JPL prevencionistas (Admin)</div>', unsafe_allow_html=True)
 
-# --- INTERFAZ PRINCIPAL ---
+# --- CUERPO DE LA APP ---
 st.title(f"Panel de Auditoría: {categoria}")
-st.markdown("**Nota:** Identifique si cada ítem **APLICA o NO APLICA** de acuerdo con el SG-SST de la empresa.")
+st.info("NOTA: Identifique si cada ítem APLICA o NO APLICA según el SG-SST de la empresa.")
 
 tab1, tab2, tab3 = st.tabs(["📋 Auditoría y Evidencias", "📊 Gráficas de Control", "🎥 Soporte"])
 
@@ -82,7 +98,6 @@ cumplidos, aplicables = 0, 0
 with tab1:
     for item in DATOS[categoria]['items']:
         with st.expander(f"🔹 {item['id']}. {item['titulo']}"):
-            # Selector de Aplicabilidad
             aplica = st.radio("¿Este requerimiento aplica?", ["Sí", "No"], key=f"ap_{categoria}_{item['id']}", horizontal=True)
             
             if aplica == "Sí":
@@ -102,13 +117,13 @@ with tab1:
                 st.info("ℹ️ Ítem marcado como 'No Aplica'.")
 
 with tab2:
-    st.header("Análisis de Riesgo y Cumplimiento")
+    st.header("Análisis de Cumplimiento Real")
     if aplicables > 0:
         progreso = (cumplidos / aplicables * 100)
         fig = px.pie(values=[progreso, 100-progreso], names=["Cumplido", "Pendiente"], 
                      color_discrete_sequence=['#800000', '#D1D1D1'], hole=.5)
         st.plotly_chart(fig, use_container_width=True)
-        st.metric("Nivel de Implementación Real", f"{int(progreso)}%")
+        st.metric("Implementación Actual", f"{int(progreso)}%")
     else:
         st.warning("Seleccione ítems aplicables para generar estadísticas.")
 
