@@ -13,22 +13,25 @@ st.markdown("""
     .stTabs [data-baseweb="tab-list"] { background-color: #800000; }
     .stTabs [data-baseweb="tab"] { color: white; }
     
-    /* Título de la App en Blanco perla */
+    /* Título en Blanco Perla */
     .titulo-sidebar {
-        color: #4F4F4F; /* Blanco perla */
+        color: #F0EAD6; /* Blanco Perla */
         font-weight: bold;
-        font-size: 1.2em;
-        margin-bottom: 10px;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+        text-align: center;
     }
 
-    /* Cuadro de Usuario con texto en Gris Ratón */
+    /* Recuadro Gris con Texto Negro para Usuario */
     .usuario-box {
-        background-color: rgba(255, 255, 255, 0.1);
-        padding: 15px;
-        border-radius: 10px;
-        color: #00BFFF; /* Azul brillante para resaltar */
+        background-color: #D3D3D3; /* Gris */
+        padding: 12px;
+        border-radius: 8px;
+        color: #000000; /* Negro */
         font-weight: bold;
-        border: 1px solid #00BFFF;
+        font-size: 0.9em;
+        text-align: center;
+        border: 1px solid #A9A9A9;
     }
 
     .stExpander {
@@ -52,7 +55,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- ESTRUCTURA DE CATEGORÍAS (Basada en la tabla legal de multas subida) ---
+# --- ESTRUCTURA DE CATEGORÍAS ---
 DATOS = {
     "Micropyme (Nivel I: < 10 Emp)": {
         "items": [
@@ -66,30 +69,30 @@ DATOS = {
         ]
     },
     "Mipyme (Nivel II: 11 - 50 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Técnico {i+1}", "evidencias": ["Documento Soporte", "Registro Ejecución"], "frase": "📌 La gestión técnica es el escudo ante auditorías legales."} for i in range(21)]
+        "items": [{"id": str(i+1), "titulo": f"Estándar Técnico {i+1}", "evidencias": ["Soporte Documental", "Registro"], "frase": "📌 La gestión técnica es el escudo ante auditorías legales."} for i in range(21)]
     },
     "Corporación Nivel I (51 - 200 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Corporativo {i+1}", "evidencias": ["Evidencia Técnica", "Validación ARL"], "frase": "📌 La excelencia en la gestión protege su capital humano y patrimonio legal."} for i in range(62)]
+        "items": [{"id": str(i+1), "titulo": f"Estándar Corporativo {i+1}", "evidencias": ["Evidencia Técnica", "Validación"], "frase": "📌 La excelencia en la gestión protege su capital humano y patrimonio legal."} for i in range(62)]
     },
     "Corporación Nivel II (> 200 Emp)": {
-        "items": [{"id": str(i+1), "titulo": f"Estándar Alta Complejidad {i+1}", "evidencias": ["Auditoría Externa", "Soporte Maestro"], "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad corporativa."} for i in range(62)]
+        "items": [{"id": str(i+1), "titulo": f"Estándar Alta Complejidad {i+1}", "evidencias": ["Auditoría Maestro", "Soporte"], "frase": "📌 En la gran escala, cada detalle de seguridad es una garantía de continuidad corporativa."} for i in range(62)]
     }
 }
 
 # --- SIDEBAR ACTUALIZADO ---
 with st.sidebar:
     st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
-    st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
     
     categoria = st.selectbox("Clasificación Organizacional", list(DATOS.keys()))
     
     st.divider()
-    # Cuadro de usuario con texto GRIS TIZA
+    # Recuadro Gris con texto Negro
     st.markdown('<div class="usuario-box">Usuario: JPL PREVENCIONISTAS S.A.S (Admin)</div>', unsafe_allow_html=True)
 
 # --- CUERPO DE LA APP ---
 st.title(f"Panel de Auditoría: {categoria}")
-st.info("NOTA: Identifique si cada ítem APLICA o NO APLICA según el SG-SST de la empresa.")
+st.info("NOTA: Identifique si cada ítem APLICA o NO APLICA de acuerdo con el SG-SST de la empresa.")
 
 tab1, tab2, tab3 = st.tabs(["📋 Auditoría y Evidencias", "📊 Gráficas de Control", "🎥 Soporte"])
 
