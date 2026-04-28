@@ -84,8 +84,8 @@ with st.sidebar:
     categoria = st.selectbox("Clasificación Organizacional", list(DATOS.keys()))
     
     st.divider()
-    # Cuadro de usuario con texto blanco
-    st.markdown('<div class="usuario-box">Usuario: JPL prevencionistas (Admin)</div>', unsafe_allow_html=True)
+    # Cuadro de usuario con texto GRIS TIZA
+    st.markdown('<div class="usuario-box">Usuario: JPL PREVENCIONISTAS S.A.S (Admin)</div>', unsafe_allow_html=True)
 
 # --- CUERPO DE LA APP ---
 st.title(f"Panel de Auditoría: {categoria}")
