@@ -57,7 +57,9 @@ if "usuario_nombre" not in st.session_state:
 # --- LOGIN ---
 if not st.session_state.autenticado:
     with st.sidebar:
-        st.image("https://raw.githubusercontent.com/germalem-eng/JPL_PREVENCIONISTAS/main/logo_jplfinal.jpg", width=160)
+        # Usa el nombre del archivo directamente
+        st.image("logo_jplfinal.jpg", width=160) 
+        
         st.markdown('<div class="titulo-sidebar">APP JPL PREVENCIONISTAS SAS</div>', unsafe_allow_html=True)
         user_input = st.text_input("ID de Usuario (Ej: Gerardo)")
         token_input = st.text_input("Clave Dinámica (Token)", type="password")
